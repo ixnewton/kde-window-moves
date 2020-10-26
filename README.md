@@ -16,8 +16,10 @@ Using the KDE System Settings > Shortcuts > Custom Shortcuts dialogue import the
 The mapping scheme:
 
 QT KDE apps: `<Ctrl> + <Shift> + ...`
+
 GTK apps full height: `<Ctrl> + <Alt> + ...`
-GTK apps below top menu/panel: `<Meta>` + `<Alt>` ...`
+
+GTK apps below top menu/panel: `<Meta> + <Alt> ...`
   
 The above combinations with navigation keys `<Left> <Right> <Up> <Down> < < > < > >` are reasonably intuitive to learn
   
