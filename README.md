@@ -9,3 +9,16 @@ There are some issues not yet resolved as the KDE environment supports native QT
 
 The set of example key combinations can be a starting point for any preferred scheme.
 
+The scripts should be placed in /usr/local/bin and set executable 755
+
+Using the KDE System Settings > Shortcuts > Custom Shortcuts dialogue import the WindowMoves.khotkeys file to create a keymapping group.
+
+The mapping scheme:
+
+QT KDE apps: <Ctrl> + <Shift> + ...
+GTK apps full height: <Ctrl> + <Alt> + ...
+GTK apps below top menu/panel: <Meta> + <Alt> ...
+  
+The above combinations with navigation keys <Left> <Right> <Up> <Down> < < > < > > are reasonably intuitive to learn
+  
+In addition the script to minimze all windows except the one in focus is <Ctrl> + <Shift> + m
