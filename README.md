@@ -35,9 +35,7 @@ The parameters:
 
 `WindowCenter - $1 - top margin` `$2 - bottom margin`
 
-`WindowHeight - $1 - top margin` `$2 - bottom margin` `$3 - hight delta divider`
-
-`WindowHeight - $4 - direction 0 up/reduce 1 down/increase`
+`WindowHeight - $1 - top margin` `$2 - bottom margin` `$3 - hight delta divider` `$4 - direction 0 up/reduce 1 down/increase`
 
 .
 
