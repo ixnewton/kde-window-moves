@@ -43,6 +43,7 @@ The parameters:
 `WindowHeight - $1 - top margin`
 `WindowHeight - $2 - bottom margin`
 `WindowHeight - $3 - hight delta divider`
+
 `WindowHeight - $4 - direction 0 up/reduce 1 down/increase`
 
 .
