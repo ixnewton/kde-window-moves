@@ -21,11 +21,10 @@ GTK apps full height: `<Ctrl> + <Alt> + ...`
 
 GTK apps below top menu/panel: `<Meta> + <Alt> ...`
   
-The above combinations with navigation keys `<Left> <Right> <Up> <Down> c (center) < (width -) > (width +)` are reasonably intuitive to learn
-  
-In addition the script to minimze all windows except the one in focus is `<Ctrl> + <Shift> + m `
+The above combinations with navigation keys `<Left> <Right> <Up> <Down> c (center) < (width -) > (width +)` are reasonably intuitive to learn.   
+In addition the script to minimze all windows except the one in focus has been set as `<Ctrl> + <Shift> + m `
 
-Standard KDE functions for minimize window is also given `<Ctrl> + <Shift> + n ` and close window `<Ctrl> + <Shift> + b `
+Standard KDE global shortcuts group "kwin" can be given alternative key mappings  for instance minimize window `<Ctrl> + <Shift> + n ` and close window `<Ctrl> + <Shift> + b ` to be in line with this scheme.
 
 The parameters:
 
