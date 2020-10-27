@@ -29,20 +29,13 @@ Standard KDE functions for minimize window is also given `<Ctrl> + <Shift> + n `
 
 The parameters:
 
-`WindowMove_R - %1 - top margin`
-`WindowMove_R - %2 - right margin`
-`WindowMove_R - %3 - bottom margin`
+`WindowMove_R - %1 - top margin` `%2 - right margin` `%3 - bottom margin`
 
-`WindowMove_L - %1 - top margin`
-`WindowMove_L - %2 - left margin`
-`WindowMove_L - %3 - bottom margin`
+`WindowMove_L - %1 - top margin` `%2 - left margin` `%3 - bottom margin`
 
-`WindowCenter - $1 - top margin`
-`WindowCenter - $2 - bottom margin`
+`WindowCenter - $1 - top margin` `$2 - bottom margin`
 
-`WindowHeight - $1 - top margin`
-`WindowHeight - $2 - bottom margin`
-`WindowHeight - $3 - hight delta divider`
+`WindowHeight - $1 - top margin` `$2 - bottom margin` `$3 - hight delta divider`
 
 `WindowHeight - $4 - direction 0 up/reduce 1 down/increase`
 
