@@ -35,10 +35,10 @@ The parameters:
 `WindowCenter - $1 - top margin` `$2 - bottom margin`
 
 `WindowHeight - $1 - top margin` `$2 - bottom margin` `$3 - hight delta divider` 
-`$4 - direction 0 ( < reduce) 1 ( > increase)`
+`$4 - direction 0 (reduce) 1 (increase)`
 
 `WindowWidth - $1 - top margin` `$2 - left margin` `$3 - width delta divider` 
-`$4 - direction 0 ( < reduce) 1 ( > increase)`
+`$4 - direction 0 (reduce) 1 (increase)`
 
 
 If detection of QT or GTK can be detected then the key commands could be reduced! 
