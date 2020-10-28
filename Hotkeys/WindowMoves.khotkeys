@@ -211,7 +211,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_17Actions0]
-CommandURL=windowmove_R.sh 5 6 28
+CommandURL=windowmove_R.sh 5 5 28
 Type=COMMAND_URL
 
 [Data_1_17Conditions]
@@ -341,7 +341,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_21Actions0]
-CommandURL=windowmove_L.sh 70 6 5
+CommandURL=windowmove_L.sh 70 5 5
 Type=COMMAND_URL
 
 [Data_1_21Conditions]
