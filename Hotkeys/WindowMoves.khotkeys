@@ -3,7 +3,7 @@ DataCount=1
 
 [Data_1]
 Comment=Comment
-DataCount=22
+DataCount=24
 Enabled=true
 Name=WindowMoves
 SystemGroup=0
@@ -29,7 +29,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_10Actions0]
-CommandURL=windowheight.sh 47 28 7 0
+CommandURL=windowheight.sh 47 28 16 0
 Type=COMMAND_URL
 
 [Data_1_10Conditions]
@@ -55,7 +55,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_11Actions0]
-CommandURL=windowheight.sh 5 28 7 1
+CommandURL=windowheight.sh 5 28 16 1
 Type=COMMAND_URL
 
 [Data_1_11Conditions]
@@ -81,7 +81,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_12Actions0]
-CommandURL=windowheight.sh 69 5 7 1
+CommandURL=windowheight.sh 69 5 16 1
 Type=COMMAND_URL
 
 [Data_1_12Conditions]
@@ -360,7 +360,7 @@ Uuid={689b8e27-333d-4bf7-9223-8a6f0eb971b2}
 [Data_1_22]
 Comment=Comment
 Enabled=true
-Name=Minimize All
+Name=MinimizeAll
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_22Actions]
@@ -382,6 +382,58 @@ TriggersCount=1
 Key=Ctrl+Shift+M
 Type=SHORTCUT
 Uuid={58a733f5-f50d-4955-8ec0-0dbd5a12f143}
+
+[Data_1_23]
+Comment=Comment
+Enabled=true
+Name=MinimizeAllAlt
+Type=SIMPLE_ACTION_DATA
+
+[Data_1_23Actions]
+ActionsCount=1
+
+[Data_1_23Actions0]
+CommandURL=minimize_all.sh
+Type=COMMAND_URL
+
+[Data_1_23Conditions]
+Comment=
+ConditionsCount=0
+
+[Data_1_23Triggers]
+Comment=Simple_action
+TriggersCount=1
+
+[Data_1_23Triggers0]
+Key=Alt+Shift+M
+Type=SHORTCUT
+Uuid={55a5d159-102d-4cf1-8ca7-b27c2f6ed0db}
+
+[Data_1_24]
+Comment=Comment
+Enabled=true
+Name=MinimizeAllAlt2
+Type=SIMPLE_ACTION_DATA
+
+[Data_1_24Actions]
+ActionsCount=1
+
+[Data_1_24Actions0]
+CommandURL=minimize_all.sh
+Type=COMMAND_URL
+
+[Data_1_24Conditions]
+Comment=
+ConditionsCount=0
+
+[Data_1_24Triggers]
+Comment=Simple_action
+TriggersCount=1
+
+[Data_1_24Triggers0]
+Key=Meta+Alt+M
+Type=SHORTCUT
+Uuid={a06b9952-9216-44ec-bd54-3a35d0ac5765}
 
 [Data_1_2Actions]
 ActionsCount=1
