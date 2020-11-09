@@ -55,7 +55,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_11Actions0]
-CommandURL=windowheight.sh 46 28 16 1
+CommandURL=windowheight.sh 46 27 16 1
 Type=COMMAND_URL
 
 [Data_1_11Conditions]
@@ -81,7 +81,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_12Actions0]
-CommandURL=windowheight.sh 47 28 16 0
+CommandURL=windowheight.sh 47 27 16 0
 Type=COMMAND_URL
 
 [Data_1_12Conditions]
@@ -133,7 +133,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_14Actions0]
-CommandURL=windowcenter.sh 5 28
+CommandURL=windowcenter.sh 5 27
 Type=COMMAND_URL
 
 [Data_1_14Conditions]
@@ -159,7 +159,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_15Actions0]
-CommandURL=windowcenter.sh 46 28
+CommandURL=windowcenter.sh 46 27
 Type=COMMAND_URL
 
 [Data_1_15Conditions]
@@ -185,7 +185,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_16Actions0]
-CommandURL=windowmove_L.sh 69 5 5
+CommandURL=windowmove_L.sh 69 4 5
 Type=COMMAND_URL
 
 [Data_1_16Conditions]
@@ -211,7 +211,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_17Actions0]
-CommandURL=windowmove_L.sh 5 5 28
+CommandURL=windowmove_L.sh 5 4 27
 Type=COMMAND_URL
 
 [Data_1_17Conditions]
@@ -237,7 +237,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_18Actions0]
-CommandURL=windowmove_L.sh 46 5 28
+CommandURL=windowmove_L.sh 46 4 27
 Type=COMMAND_URL
 
 [Data_1_18Conditions]
@@ -263,7 +263,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_19Actions0]
-CommandURL=windowmove_R.sh 69 5 5
+CommandURL=windowmove_R.sh 69 4 5
 Type=COMMAND_URL
 
 [Data_1_19Conditions]
@@ -283,7 +283,7 @@ Uuid={91accfa7-3975-479a-af8d-74436c453281}
 ActionsCount=1
 
 [Data_1_1Actions0]
-CommandURL=windowwidth.sh 69 6 32 0
+CommandURL=windowwidth.sh 69 5 32 0
 Type=COMMAND_URL
 
 [Data_1_1Conditions]
@@ -315,7 +315,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_20Actions0]
-CommandURL=windowmove_R.sh 5 5 28
+CommandURL=windowmove_R.sh 5 4 27
 Type=COMMAND_URL
 
 [Data_1_20Conditions]
@@ -341,7 +341,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_21Actions0]
-CommandURL=windowmove_R.sh 46 6 28
+CommandURL=windowmove_R.sh 46 4 27
 Type=COMMAND_URL
 
 [Data_1_21Conditions]
@@ -439,7 +439,7 @@ Uuid={a06b9952-9216-44ec-bd54-3a35d0ac5765}
 ActionsCount=1
 
 [Data_1_2Actions0]
-CommandURL=windowwidth.sh 69 6 32 1
+CommandURL=windowwidth.sh 69 5 32 1
 Type=COMMAND_URL
 
 [Data_1_2Conditions]
@@ -451,7 +451,7 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_2Triggers0]
-Key=Ctrl+>
+Key=
 Type=SHORTCUT
 Uuid={4ddd009c-6015-42b0-8a81-011a2514c75b}
 
@@ -529,7 +529,7 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_5Triggers0]
-Key=Meta+Alt+,
+Key=
 Type=SHORTCUT
 Uuid={b6c27a6b-d195-45d0-8c12-874e696534e5}
 
