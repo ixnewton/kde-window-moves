@@ -41,5 +41,5 @@ The parameters:
 `$4 - direction 0 (reduce) 1 (increase)`
 
 
-If detection of QT or GTK can be detected then the key commands could be reduced! 
+If the 'windowmove' command can be fixed to behave the same for QT or GTK windows then the key commands could be reduced! 
 
