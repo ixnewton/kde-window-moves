@@ -112,6 +112,22 @@ function windowcenter () {
     fi
 
  }
+
+function windowfill () {
+
+    window_x_pos=$2
+    window_y_pos=$(($window_y_pos))
+    window_fit_height=$(($display_height - $window_y_pos -$2 - $3))
+    window_fit_width=$(($display_width - $2 - $2))
+
+    if [ "$window_name" != "Desktop — Plasma" ];
+        then
+             xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos 
+             xdotool windowsize $active_window_id $window_fit_width $window_fit_height
+
+    fi
+
+ }
  
  function windowmove_l () {
 
@@ -165,7 +181,10 @@ function windowcenter () {
         windowmove_r 5 4 5
     ;;
     moveC)
-        windowcenter 5 5
+        windowcenter 5 4
+    ;;
+    moveF)
+        windowfill 5 4 $window_gtk_fix
     ;;
     widthM)
         windowwidth $window_y_pos 5 32 0
