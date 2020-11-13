@@ -22,6 +22,7 @@ function windowheight () {
     window_fit_height=$(($display_height - $window_y_pos - $2 - $4))
     window_min_height=$(($window_fit_height * 9 / 32))
     window_delta=$(($window_fit_height / $3))
+    window_zone=$(($window_fit_height - $window_delta))
     
     if [ "$window_name" != "Desktop — Plasma" ]; then
             if [ $5 == 1 ]; then
@@ -121,10 +122,16 @@ function windowfill () {
     window_fit_height=$(($display_height - $window_y_pos -$2 - $3))
     window_fit_width=$(($display_width - $2 - $2))
 
-    if [ "$window_name" != "Desktop — Plasma" ];
-        then
-             xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos 
-             xdotool windowsize $active_window_id $window_fit_width $window_fit_height
+    if [ "$window_name" != "Desktop — Plasma" ]; then
+        if [ $(($window_width + $2)) -gt $window_fit_width ]; then
+            window_fit_width=$(($window_fit_width * 7 / 8))
+            window_x_pos=$((($display_width / 2) - ($window_fit_width / 2)))
+            xdotool windowsize $active_window_id $window_fit_width $window_fit_height
+            xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
+        else
+            xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos 
+            xdotool windowsize $active_window_id $window_fit_width $window_fit_height
+        fi             
 
     fi
 
@@ -194,10 +201,10 @@ function windowfill () {
         windowwidth $window_y_pos 5 32 1
     ;;  
     heightM)
-        windowheight 5 5 16 $window_gtk_fix 1
+        windowheight 5 5 24 $window_gtk_fix 1
     ;;  
     heightP)
-        windowheight 5 5 16 $window_gtk_fix 0
+        windowheight 5 5 24 $window_gtk_fix 0
     ;; 
     winTop)
         windowtop 5 5 $2 $window_gtk_fix
