@@ -9,7 +9,7 @@
     window_y_pos=$(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:],]+" '/Position:/{print $4}')
     window_x_pos=$(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:],]+" '/Position:/{print $3}')
 
-    winQT=$(echo $window_name | grep -c  "— ")
+    winQT=$(echo $window_name | grep -c  "— \|Octopi\|Session\|HeidiSQL\|qBittorrent")
     window_gtk_fix=0
     
     if [ "$winQT" -eq 0 ]; then
@@ -43,15 +43,16 @@ function windowheight () {
 
 function windowtop () {
 
-    window_fit_height=$(($display_height - $3 - $2 - $1 - $4))
-    window_y_pos=$(( $2 + $3 - $4 ))
+    window_fit_height=$(($display_height - $3 - $2 - $1))
+    window_y_new_pos=$(( $2 + $3 - $4 ))
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
             if [ $window_height -gt $window_fit_height ]; then
                 window_height=$window_fit_height
             fi
-            xdotool windowsize --sync $active_window_id $window_width $window_height
-            xdotool windowmove --sync $active_window_id 'x' $window_y_pos
+             xdotool windowsize --sync $active_window_id $window_width $window_height
+             xdotool windowmove --sync $active_window_id 'x' $window_y_new_pos
+
     fi
 
 }
@@ -80,8 +81,8 @@ function windowwidth () {
                     xdotool windowsize $active_window_id $window_new_width $window_height
             else
                     window_new_width=$(($window_width - $window_delta))
-                if [ $(($display_width - $window_width - $window_x_pos)) -le $(($window_delta / 2)) ]; then
-                        window_x_pos=$(($display_width - $window_new_width -$2))
+                    if [ $(($display_width - $window_width - $window_x_pos)) -le $(($window_delta / 2)) ]; then
+                        window_x_pos=$(($display_width - $window_new_width - $2))
                     else
                         window_x_pos=$(($window_x_pos + ($window_delta / 2)))
                     fi
@@ -90,7 +91,7 @@ function windowwidth () {
                     fi
                     xdotool windowsize --sync $active_window_id $window_new_width $window_height
                     if [ $(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:]x]+" '/Geometry:/{print $3}') -ne  $window_width ]; then
-                    xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
+                        xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
                     fi
             fi        
     fi
