@@ -7,7 +7,7 @@ I like to have windows aligned left, right or centred but not neccesarily full s
 
 There are some issues not yet resolved as the KDE environment supports native QT based GUI apps as well as GTK apps which are native to Gnome desktop flavours. xdotool gets the window coordinates of any window as being the content without the window for position coordinates but when setting position (xdotool windowmove) moves the inner window to the position requested for QT windows and the outer window with decoration for GTK. As a result different input parameters are used for each window type. In practice this is native Kate, Konsole, Dolphin, kdevelop etc as QT and Chrome, Firefox, Thunderbird, Gimp as GTK. The work around for now is to detect the window type by the separator character used in the window title which works for the majority of applications. This is not a robust solution some apps are out by the window border width notably Wine apps and Libreoffice though this is not fatal. I hope to persuade the xdotool project to fix this!
 
-I favor minimal window borders with only a 18px header and borderless sides and bottom one of the nicer style things nicked from MacOS! There may be issues if side/bottom borders are used.
+I favour minimal window borders with only an 18px header with borderless sides and bottom, one of the nicer style things nicked from MacOS! There may be position issues if side/bottom borders are used as an additional margin fix would have to be applied for the left window border of GTK windows.
 
 The set of example key combinations can be a starting point for any preferred scheme.
 
