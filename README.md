@@ -38,9 +38,9 @@ The command parameters:
 
 `window-moves.sh widthP - Width plus` - Adjusts width centered or from edge 32 steps
 
-`window-moves.sh heightM - Height minus` - Adjusts height from bottom in 16 steps
+`window-moves.sh heightM - Height minus` - Adjusts height of window bottom up in 16 steps
 
-`window-moves.sh heightP - Height plus` - Adjusts height from bottom in 16 steps
+`window-moves.sh heightP - Height plus` - Adjusts height of window bottom in 16 steps
 
 `window-moves.sh winTop 1 - Top margin 5px` - Set to be on the top margin which is 5px
 
@@ -48,5 +48,5 @@ The command parameters:
 
 `window-moves.sh winTop 3 - Top margin 90px` - Set to be in the main body of desktop 90px
 
-If the xdotool windowmove can be fixed to behave the same for QT or GTK windows then there would be no need for position work arounds! 
+If the xdotool windowmove can be fixed to behave the same for QT or GTK windows then there would be no need for window detection and a position work around fix! 
 
