@@ -1,5 +1,5 @@
 # kde-window-moves
-A KDE window movement/resize/minimise script using xdotool for reference postioning of windows in KDE/Plasma 5 desktop
+A KDE window movement/resize/zoom/minimise script using xdotool for reference postioning of windows in KDE/Plasma 5 desktop
 
 At the outset the aim was to provide a reliable way to position windows with keyboard shorcuts. The discovery of xdotool gives the opportunity to automate some useful moves without too much sweat.
 
@@ -32,7 +32,7 @@ The command parameters:
 
 `window-moves.sh moveC - Move center` - Moves window to center horizontally
 
-`window-moves.sh moveF - Move center` - Expand width window to fill width or defined widths 7/8 then 6/8 in sequence
+`window-moves.sh zoomC - Zoom on center` - Expand width window in 3 steps to set screen margins defined by 16/16 14/16 then 13/16 in sequence
 
 `window-moves.sh widthM - Width minus` - Adjusts width centered or from edge 32 steps
 
