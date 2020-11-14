@@ -1,5 +1,5 @@
 # kde-window-moves
-A KDE window movement/resize/minimise script using xdotool
+A KDE window movement/resize/minimise script using xdotool for reference postioning of windows in KDE/Plasma 5 desktop
 
 At the outset the aim was to provide a reliable way to position windows with keyboard shorcuts. The discovery of xdotool gives the opportunity to automate some useful moves without too much sweat.
 
