@@ -126,17 +126,24 @@ function windowzoom () {
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
         if [ $window_width -eq $window_fit_width ]; then
-            window_fit_width=$(($window_fit_width * $5 / $6))
-            window_fit_height=$(($display_height * $5 / $6))
+            window_fit_width=$(($window_fit_width * $6 / $7))
+            window_fit_height=$(($display_height * $6 / $7))
             window_x_pos=$((($display_width / 2) - ($window_fit_width / 2)))
             window_y_pos=$((($display_height / 2) - ($window_fit_height / 2) - $3))
             xdotool windowsize $active_window_id $window_fit_width $window_fit_height
             xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
-        elif [ $(($window_width)) -eq $(($window_fit_width * $5 / $6)) ]; then
-            window_fit_width=$(($window_fit_width * $4 / $6))
-            window_fit_height=$(($display_height * $4 / $6))
+        elif [ $(($window_width)) -eq $(($window_fit_width * $6 / $7)) ]; then
+            window_fit_width=$(($window_fit_width * $5 / $7))
+            window_fit_height=$(($display_height * $5 / $7))
             window_x_pos=$((($display_width / 2) - ($window_fit_width / 2)))
-             window_y_pos=$((($display_height / 2) - ($window_fit_height / 2) - $3))
+            window_y_pos=$((($display_height / 2) - ($window_fit_height / 2) - $3))
+            xdotool windowsize $active_window_id $window_fit_width $window_fit_height
+            xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
+       elif [ $(($window_width)) -eq $(($window_fit_width * $5 / $7)) ]; then
+            window_fit_width=$(($window_fit_width * $4 / $7))
+            window_fit_height=$(($display_height * $4 / $7))
+            window_x_pos=$((($display_width / 2) - ($window_fit_width / 2)))
+            window_y_pos=$((($display_height / 2) - ($window_fit_height / 2) - $3))
             xdotool windowsize $active_window_id $window_fit_width $window_fit_height
             xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
         else
@@ -202,7 +209,7 @@ function windowzoom () {
         windowcenter 5 4
     ;;
     zoomC )
-        windowzoom 5 4 $window_gtk_fix 14 13 16
+        windowzoom 5 4 $window_gtk_fix 14 13 11 16
     ;;
     widthM )
         windowwidth $window_y_pos 5 32 0
