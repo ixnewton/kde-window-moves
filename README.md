@@ -32,7 +32,7 @@ The command parameters:
 
 `window-moves.sh moveC - Move center` - Moves window to center horizontally
 
-`window-moves.sh moveF - Move center` - Expand width window to fill width or a defined width, 7/8 then 6/8 in sequence
+`window-moves.sh moveF - Move center` - Expand width window to fill width or defined widths 7/8 then 6/8 in sequence
 
 `window-moves.sh widthM - Width minus` - Adjusts width centered or from edge 32 steps
 
