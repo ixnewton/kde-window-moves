@@ -29,7 +29,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_10Actions0]
-CommandURL=window-moves.sh winTop 63
+CommandURL=window-moves.sh winTop 64
 Type=COMMAND_URL
 
 [Data_1_10Conditions]
@@ -55,7 +55,7 @@ Type=SIMPLE_ACTION_DATA
 ActionsCount=1
 
 [Data_1_11Actions0]
-CommandURL=window-moves.sh winTop 92
+CommandURL=window-moves.sh winTop 96
 Type=COMMAND_URL
 
 [Data_1_11Conditions]

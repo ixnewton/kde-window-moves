@@ -9,7 +9,7 @@
     window_y_pos=$(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:],]+" '/Position:/{print $4}')
     window_x_pos=$(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:],]+" '/Position:/{print $3}')
 
-    winQT=$(echo $window_name | grep -c  "— \|Octopi\|Session\|HeidiSQL\|qBittorrent")
+    winQT=$(echo $window_name | grep -c  "— \|Octopi\|Session\|System\|HeidiSQL\|qBittorrent")
     window_gtk_fix=0
     
     if [ "$winQT" -eq 0 ]; then
@@ -123,8 +123,13 @@ function windowfill () {
     window_fit_width=$(($display_width - $2 - $2))
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
-        if [ $(($window_width + $2)) -gt $window_fit_width ]; then
-            window_fit_width=$(($window_fit_width * 7 / 8))
+        if [ $(($window_width)) -eq $window_fit_width ]; then
+            window_fit_width=$(($window_fit_width * $4 / $6))
+            window_x_pos=$((($display_width / 2) - ($window_fit_width / 2)))
+            xdotool windowsize $active_window_id $window_fit_width $window_fit_height
+            xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
+        elif [ $(($window_width)) -eq $(($window_fit_width * $4 / $6)) ]; then
+            window_fit_width=$(($window_fit_width * $5 / $6))
             window_x_pos=$((($display_width / 2) - ($window_fit_width / 2)))
             xdotool windowsize $active_window_id $window_fit_width $window_fit_height
             xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
@@ -182,34 +187,34 @@ function windowfill () {
  }
  
  case $1 in
-    moveL)
+    moveL )
         windowmove_l 5 4 5
     ;;
-    moveR)
+    moveR )
         windowmove_r 5 4 5
     ;;
-    moveC)
+    moveC )
         windowcenter 5 4
     ;;
-    moveF)
-        windowfill 5 4 $window_gtk_fix
+    moveF )
+        windowfill 5 4 $window_gtk_fix 7 6 8
     ;;
-    widthM)
+    widthM )
         windowwidth $window_y_pos 5 32 0
     ;;  
-    widthP)
+    widthP )
         windowwidth $window_y_pos 5 32 1
     ;;  
-    heightM)
+    heightM )
         windowheight 5 5 24 $window_gtk_fix 1
     ;;  
-    heightP)
+    heightP )
         windowheight 5 5 24 $window_gtk_fix 0
     ;; 
-    winTop)
+    winTop )
         windowtop 5 5 $2 $window_gtk_fix
     ;; 
-    minimize)
+    minimize )
         minimize
     ;;    
     *)
