@@ -20,7 +20,7 @@ The mapping scheme:
 All actions: `<Ctrl> + <Shift> + ...`
   
 The above combinations with navigation keys `<Left> <Right> <Up> <Down> c (center) < (width -) > (width +) 1 2 3` are reasonably intuitive to learn.   
-In addition the script to minimze all windows except the one in focus has been set as `<Ctrl> + <Shift> + m `
+In addition the script to minimze all windows except the one in focus has been set as `<Ctrl> + <Shift> + m `. Window zoom is implemented in 4 steps either increasing as `<Ctrl> + <Shift> + w ` and decreasing `<Ctrl> + <Shift> + q ` these are less obvious keys but unused by other apps or KDE. 
 
 Standard KDE global shortcuts group "kwin" can be given alternative key mappings for instance minimize window `<Ctrl> + <Shift> + n ` and close window `<Ctrl> + <Shift> + b ` to be in line with this scheme.
 
@@ -32,9 +32,9 @@ The command parameters:
 
 `window-moves.sh moveC - Move center` - Moves window to center horizontally
 
-`window-moves.sh zoomM - Zoom on center minus` - Zoom window reduction in 4 sequential steps
+`window-moves.sh zoomM - Zoom on center minus` - Zoom decreasing in 4 sequential steps
 
-`window-moves.sh zoomP - Zoom on center plus` - Zoom window expand in 4 sequetial steps
+`window-moves.sh zoomP - Zoom on center plus` - Zoom incresing in 4 sequetial steps
 
 `window-moves.sh widthM - Width minus` - Adjusts width centered or from edge 32 steps
 
