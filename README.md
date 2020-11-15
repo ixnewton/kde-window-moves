@@ -32,7 +32,9 @@ The command parameters:
 
 `window-moves.sh moveC - Move center` - Moves window to center horizontally
 
-`window-moves.sh zoomC - Zoom on center` - Zoom window in 4 steps in sequence
+`window-moves.sh zoomM - Zoom on center minus` - Zoom window reduction in 4 sequential steps
+
+`window-moves.sh zoomP - Zoom on center plus` - Zoom window expand in 4 sequetial steps
 
 `window-moves.sh widthM - Width minus` - Adjusts width centered or from edge 32 steps
 
