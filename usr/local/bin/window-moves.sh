@@ -208,8 +208,11 @@ function windowzoom () {
     moveC )
         windowcenter 5 4
     ;;
-    zoomC )
+    zoomP )
         windowzoom 5 4 $window_gtk_fix 14 13 11 16
+    ;;
+    zoomM )
+        windowzoom 5 4 $window_gtk_fix 11 13 14 16
     ;;
     widthM )
         windowwidth $window_y_pos 5 32 0
@@ -218,13 +221,13 @@ function windowzoom () {
         windowwidth $window_y_pos 5 32 1
     ;;  
     heightM )
-        windowheight 5 5 24 $window_gtk_fix 1
+        windowheight 5 4 24 $window_gtk_fix 1
     ;;  
     heightP )
-        windowheight 5 5 24 $window_gtk_fix 0
+        windowheight 5 4 24 $window_gtk_fix 0
     ;; 
     winTop )
-        windowtop 5 5 $2 $window_gtk_fix
+        windowtop 5 4 $2 $window_gtk_fix
     ;; 
     minimize )
         minimize
