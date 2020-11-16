@@ -11,6 +11,8 @@ I favour minimal window borders with only an 18px header with borderless sides a
 
 One behaviour implemented in widthM/widthP/winTop is that left, right and bottom edges are sticky so when a window is close to the margin zone this edge is static and expansion is then relative to the "sticky" edge.
 
+KDE remembers the size and position of application windows so they re-open at the last used layout position. window-moves.sh can quickly set preferred layouts for most applications.   
+
 The set of example key combinations can be a starting point for any preferred scheme.
 
 The scripts should be placed in /usr/local/bin and set executable 755
