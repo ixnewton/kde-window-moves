@@ -100,7 +100,7 @@ function windowwidth () {
 
     window_fit_width=$(($display_width - (2 * $2)))
     window_delta=$(($window_fit_width / $3))
-    window_y_pos=$1
+    window_y_pos=$(($1 - $footer_height))
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
             if [ $4 == 1 ]; then
@@ -293,10 +293,10 @@ function windowcenter () {
         windowzoom 5 5 $gtk_fix 16 41 0
     ;;
     widthM )
-        windowwidth $window_y_pos 5 32 0
+        windowwidth $window_y_pos 5 42 0
     ;;  
     widthP )
-        windowwidth $window_y_pos 5 32 1
+        windowwidth $window_y_pos 5 42 1
     ;;  
     heightM )
         windowheight 5 5 24 $gtk_fix 1
