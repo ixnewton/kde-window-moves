@@ -136,22 +136,6 @@ function windowwidth () {
 
 }
 
-function windowcenter () {
-
-    window_x_pos=$((($display_width - $window_width) /2 ))
-    window_fit_height=$(($display_height - $1 - $2))
-
-    if [ "$window_name" != "Desktop — Plasma" ];
-        then
-        if [ $window_height -gt $window_fit_height ]; then
-            window_new_height=$window_fit_height
-            xdotool windowsize --sync $active_window_id $window_width $window_new_height
-        fi
-        xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
-    fi
-
- }
-
 function windowzoom () {
 
     window_x_pos=$2
@@ -221,6 +205,7 @@ function windowzoom () {
  function windowmove_l () {
 
     window_x_pos=$2
+    window_new_y_pos=$(($window_y_pos - $4))
     window_fit_height=$(($display_height - $1 - $3))
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
@@ -228,7 +213,11 @@ function windowzoom () {
             window_new_height=$window_fit_height
             xdotool windowsize --sync $active_window_id $window_width $window_new_height
         fi
-        xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
+        if [ $4 -eq 0 ]; then
+            xdotool windowmove --sync $active_window_id $window_x_pos 'y'
+        else
+            xdotool windowmove --sync $active_window_id $window_x_pos $window_new_y_pos
+        fi
     fi
  
  }
@@ -236,6 +225,7 @@ function windowzoom () {
  function windowmove_r () {
  
     window_x_pos=$(($display_width - $window_width - $2))
+    window_new_y_pos=$(($window_y_pos - $4))
     window_fit_height=$(($display_height - $1 - $3))
 
     if [ "$window_name" != "Desktop — Plasma" ];
@@ -244,7 +234,32 @@ function windowzoom () {
             window_new_height=$window_fit_height
             xdotool windowsize --sync $active_window_id $window_width $window_new_height
         fi
-        xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
+        if [ $4 -eq 0 ]; then
+            xdotool windowmove --sync $active_window_id $window_x_pos 'y'
+        else
+            xdotool windowmove --sync $active_window_id $window_x_pos $window_new_y_pos
+        fi
+    fi
+
+ }
+
+function windowcenter () {
+
+    window_x_pos=$((($display_width - $window_width) /2 ))
+    window_new_y_pos=$(($window_y_pos - $3))
+    window_fit_height=$(($display_height - $1 - $2))
+
+    if [ "$window_name" != "Desktop — Plasma" ];
+        then
+        if [ $window_height -gt $window_fit_height ]; then
+            window_new_height=$window_fit_height
+            xdotool windowsize --sync $active_window_id $window_width $window_new_height
+        fi
+        if [ $3 -eq 0 ]; then
+            xdotool windowmove --sync $active_window_id $window_x_pos 'y'
+        else
+            xdotool windowmove --sync $active_window_id $window_x_pos $window_new_y_pos
+        fi
     fi
 
  }
@@ -264,13 +279,13 @@ function windowzoom () {
  
  case $1 in
     moveL )
-        windowmove_l 5 5 5
+        windowmove_l 5 5 5 $footer_height
     ;;
     moveR )
-        windowmove_r 5 5 5
+        windowmove_r 5 5 5 $footer_height
     ;;
     moveC )
-        windowcenter 5 5
+        windowcenter 5 5 $footer_height
     ;;
     zoomP )
         windowzoom 5 5 $gtk_fix 16 1
