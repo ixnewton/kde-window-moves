@@ -48,11 +48,9 @@ The command parameters:
 
 `window-moves.sh heightP - Height plus` - Adjusts height of window bottom in 16 steps
 
-`window-moves.sh winTop 1 - Top margin 5px` - Set to be on the top margin which is 5px
+`window-moves.sh topM - Top margin minus` - Adjusts top margin in steps of 40px
 
-`window-moves.sh winTop 2 - Top margin 63px` - Set below desktop top panel which is 60px  
-
-`window-moves.sh winTop 3 - Top margin 90px` - Set to be in the main body of desktop 90px
+`window-moves.sh topP - Top margin plus` - Adjusts top margin in steps of 40px  
 
 If the xdotool windowmove can be fixed to behave the same for QT or GTK windows then there would be no need for window detection and a position work around fix! 
 
