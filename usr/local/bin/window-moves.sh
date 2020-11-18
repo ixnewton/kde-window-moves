@@ -142,21 +142,21 @@ function windowzoom () {
     window_y_pos=$(($1 + $header_height))
     window_fit_height=$(($display_height - $1 - $2 - $3 - $header_height))
     window_fit_width=$(($display_width - $2 - $2))
-    zoom_y_delta="41"
+    zoom_y_delta=$5
     zoom_x_delta=$(($display_width / $4))
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
-        if  [ $5 -eq 1 ]; then
+        if  [ $6 -eq 1 ]; then
             if [ $window_width -le  $(($window_fit_width - $(($zoom_x_delta * 5)))) ]; then            
                 window_fit_width=$(($window_fit_width - $(($zoom_x_delta * 4))))
                 window_fit_height=$(($window_fit_height - $(($zoom_y_delta * 4))))
-        elif [ $window_width -le  $(($window_fit_width - $(($zoom_x_delta * 4)))) ]; then            
+            elif [ $window_width -le  $(($window_fit_width - $(($zoom_x_delta * 4)))) ]; then            
                 window_fit_width=$(($window_fit_width - $(($zoom_x_delta * 3))))
                 window_fit_height=$(($window_fit_height - $(($zoom_y_delta * 3))))
             elif [ $window_width -le  $(($window_fit_width - $(($zoom_x_delta * 3)))) ]; then            
                 window_fit_width=$(($window_fit_width - $(($zoom_x_delta * 2))))
                 window_fit_height=$(($window_fit_height - $(($zoom_y_delta * 2))))
-        elif [ $window_width -le  $(($window_fit_width - $(($zoom_x_delta * 2)))) ]; then            
+            elif [ $window_width -le  $(($window_fit_width - $(($zoom_x_delta * 2)))) ]; then            
                 window_fit_width=$(($window_fit_width - $(($zoom_x_delta))))
                 window_fit_height=$(($window_fit_height - $(($zoom_y_delta))))
             elif [ $window_width -le  $(($window_fit_width - $zoom_x_delta)) ]; then            
@@ -167,12 +167,11 @@ function windowzoom () {
                 window_fit_height=$(($window_fit_height))
             fi
             
-            window_x_pos=$((($display_width / 2) - ($window_fit_width / 2)))
-            window_y_pos=$(($(($(($display_height - $window_fit_height + $header_height + $3)) / 2))))
-
-            xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos 
-            xdotool windowsize --sync $active_window_id $window_fit_width $window_fit_height   
-            
+            window_x_pos=$(($(($display_width - $window_fit_width)) / 2))
+            window_y_pos=$(($(($(($display_height - $window_fit_height + $header_height - $footer_height)) / 2))))
+            xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
+            xdotool windowsize $active_window_id $window_fit_width $window_fit_height
+              
         else
             if [ $window_width -ge  $(($window_fit_width))  ]; then
                  window_fit_width=$(($window_fit_width - $zoom_x_delta))
@@ -194,9 +193,9 @@ function windowzoom () {
                 window_fit_height=$(($window_fit_height - $(($zoom_y_delta * 5))))
             fi
             window_x_pos=$(($(($display_width - $window_fit_width)) / 2))
-            window_y_pos=$(($(($(($display_height - $window_fit_height + $header_height + $3)) / 2))))
+            window_y_pos=$(($(($(($display_height - $window_fit_height + $header_height - $footer_height)) / 2))))
             xdotool windowsize --sync $active_window_id $window_fit_width $window_fit_height
-            xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
+            xdotool windowmove $active_window_id $window_x_pos $window_y_pos
 
         fi
     fi
@@ -288,10 +287,10 @@ function windowcenter () {
         windowcenter 5 5 $footer_height
     ;;
     zoomP )
-        windowzoom 5 5 $gtk_fix 16 1
+        windowzoom 5 5 $gtk_fix 16 41 1
     ;;
     zoomM )
-        windowzoom 5 5 $gtk_fix 16 0
+        windowzoom 5 5 $gtk_fix 16 41 0
     ;;
     widthM )
         windowwidth $window_y_pos 5 32 0
@@ -306,10 +305,10 @@ function windowcenter () {
         windowheight 5 5 24 $gtk_fix 0
     ;; 
     topP )
-        windowtop 5 5 $header_height $gtk_fix 40 1
+        windowtop 5 5 $header_height $gtk_fix 41 1
     ;; 
     topM )
-        windowtop 5 5 $header_height $gtk_fix 40 0
+        windowtop 5 5 $header_height $gtk_fix 41 0
     ;; 
     minimize )
         minimize
