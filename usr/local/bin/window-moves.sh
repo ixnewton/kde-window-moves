@@ -11,8 +11,10 @@
 
 # Detect QT windows which do not need any position fiddles to compensate for windowmove positioning by frame coords for GTK built apps
 # With QT windows we add header_height and for GTK both gtk_fix for header and footer_height to compensate for a dummy footer border! 
-    winQT=$(echo $window_name | grep -c  "— \|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular")
-    if [ "$winQT" -eq 0 ]; then
+    echo $window_name
+    winQT=$(echo $window_name | grep -c  "— \|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader")
+    winGTK=$(echo $window_name | grep -c  "Krusader/ -/ ROOT")
+    if [ "$winQT" -eq 0 ] || [ "$winGTK" -gt 0 ] ; then
         gtk_fix=20
         header_height=0
         footer_height=23
