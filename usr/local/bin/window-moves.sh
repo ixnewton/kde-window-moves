@@ -203,7 +203,7 @@ function windowzoom () {
  
  function windowmove_l () {
 
-    window_x_pos=$2
+    window_new_x_pos=$2
     window_new_y_pos=$(($window_y_pos - $4))
     window_fit_height=$(($display_height - $1 - $3))
 
@@ -212,10 +212,17 @@ function windowzoom () {
             window_new_height=$window_fit_height
             xdotool windowsize --sync $active_window_id $window_width $window_new_height
         fi
+        if [ $window_x_pos -eq $2 ]; then
+            window_new_x_pos=$5
+        elif [ $window_x_pos -eq $5 ]; then
+            window_new_x_pos=$6
+        elif [ $window_x_pos -eq $6 ]; then
+            window_new_x_pos=$7
+        fi
         if [ $4 -eq 0 ]; then
-            xdotool windowmove --sync $active_window_id $window_x_pos 'y'
+            xdotool windowmove --sync $active_window_id $window_new_x_pos 'y'
         else
-            xdotool windowmove --sync $active_window_id $window_x_pos $window_new_y_pos
+            xdotool windowmove --sync $active_window_id $window_new_x_pos $window_new_y_pos
         fi
     fi
  
@@ -223,7 +230,7 @@ function windowzoom () {
  
  function windowmove_r () {
  
-    window_x_pos=$(($display_width - $window_width - $2))
+    window_new_x_pos=$(($display_width - $window_width - $2))
     window_new_y_pos=$(($window_y_pos - $4))
     window_fit_height=$(($display_height - $1 - $3))
 
@@ -233,10 +240,17 @@ function windowzoom () {
             window_new_height=$window_fit_height
             xdotool windowsize --sync $active_window_id $window_width $window_new_height
         fi
+        if [ $window_x_pos -eq $(($display_width - $window_width - $2)) ]; then
+            window_new_x_pos=$(($display_width - $window_width - $5))
+        elif [ $window_x_pos -eq $(($display_width - $window_width - $5)) ]; then
+            window_new_x_pos=$(($display_width - $window_width - $6))
+        elif [ $window_x_pos -eq $(($display_width - $window_width - $6)) ]; then
+            window_new_x_pos=$(($display_width - $window_width - $7))
+        fi
         if [ $4 -eq 0 ]; then
-            xdotool windowmove --sync $active_window_id $window_x_pos 'y'
+            xdotool windowmove --sync $active_window_id $window_new_x_pos 'y'
         else
-            xdotool windowmove --sync $active_window_id $window_x_pos $window_new_y_pos
+            xdotool windowmove --sync $active_window_id $window_new_x_pos $window_new_y_pos
         fi
     fi
 
@@ -278,19 +292,19 @@ function windowcenter () {
  
  case $1 in
     moveL )
-        windowmove_l 5 5 5 $footer_height
+        windowmove_l 5 5 5 $footer_height 20 40 60
     ;;
     moveR )
-        windowmove_r 5 5 5 $footer_height
+        windowmove_r 5 5 5 $footer_height 20 40 60
     ;;
     moveC )
         windowcenter 5 5 $footer_height
     ;;
     zoomP )
-        windowzoom 5 5 $gtk_fix 16 41 1
+        windowzoom 5 5 $gtk_fix 16 42 1
     ;;
     zoomM )
-        windowzoom 5 5 $gtk_fix 16 41 0
+        windowzoom 5 5 $gtk_fix 16 42 0
     ;;
     widthM )
         windowwidth $window_y_pos 5 42 0
@@ -305,10 +319,10 @@ function windowcenter () {
         windowheight 5 5 24 $gtk_fix 0
     ;; 
     topP )
-        windowtop 5 5 $header_height $gtk_fix 41 1
+        windowtop 5 5 $header_height $gtk_fix 42 1
     ;; 
     topM )
-        windowtop 5 5 $header_height $gtk_fix 41 0
+        windowtop 5 5 $header_height $gtk_fix 42 0
     ;; 
     minimize )
         minimize
