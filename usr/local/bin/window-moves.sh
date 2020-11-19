@@ -9,8 +9,8 @@
     window_y_pos=$(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:],]+" '/Position:/{print $4}')
     window_x_pos=$(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:],]+" '/Position:/{print $3}')
 
-    # Detect QT windows which do not need any position fiddles to compensate for windowmove positioning by frame coords for GTK built apps
-    # With QT windows we add header_height and for GTK both gtk_fix for header and footer_height to compensate for a dummy footer border! 
+# Detect QT windows which do not need any position fiddles to compensate for windowmove positioning by frame coords for GTK built apps
+# With QT windows we add header_height and for GTK both gtk_fix for header and footer_height to compensate for a dummy footer border! 
     winQT=$(echo $window_name | grep -c  "— \|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular")
     if [ "$winQT" -eq 0 ]; then
         gtk_fix=20
@@ -21,7 +21,9 @@
         header_height=23
         footer_height=0
     fi
-   
+
+# Function windowheight provides window height adjustment from the bottom in steps by pixel amaount 
+# parameters: $1 <top margin>, $2 <side margin>, $3 <window header>,  $4 <GTK header fix>, $4 <step in pixels>, $5 <direction 1=increase> 
 function windowheight () {
 
     window_fit_height=$(($display_height - $window_y_pos - $2))
@@ -47,6 +49,8 @@ function windowheight () {
 
 }
 
+# Function windowtop provides a top margin expand/contract function in steps by pixel amaount
+# parameters: $1 <top margin>, $2 <side margin>, $3 <window header>,  $4 <GTK header fix>, $4 <step in pixels>, $5 <direction 1=increase> 
 function windowtop () {
 
     window_fit_pos=$(( $display_height - $2 - $2 ))
@@ -97,6 +101,8 @@ function windowtop () {
     fi
 }
 
+# Function windowwidth provides a width expand/contract function in steps proportional to screen width
+# parameters: $1 <window_y_pos>, $2 <side margin>, $3 <width step delta>, $4 <direction 1=increase> 
 function windowwidth () {
 
     window_fit_width=$(($display_width - (2 * $2)))
@@ -137,6 +143,8 @@ function windowwidth () {
 
 }
 
+# Function windowzoom provides a zoom function centered and proportional to the screen size
+# parameters: $1 <top margin>, $2 <side margin>, $3 <GTK header fix>,  $4 <horizontal step delta>, $5 <vertical step delta>, $6 <direction 1=increase> 
 function windowzoom () {
 
     window_x_pos=$2
@@ -144,7 +152,7 @@ function windowzoom () {
     window_fit_height=$(($display_height - $1 - $2 - $3 - $header_height))
     window_fit_width=$(($display_width - $2 - $2))
     zoom_y_delta=$5
-    zoom_x_delta=$(($display_width / $4))
+    zoom_x_delta=$4
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
         if  [ $6 -eq 1 ]; then
@@ -167,7 +175,6 @@ function windowzoom () {
                 window_fit_width=$(($window_fit_width))
                 window_fit_height=$(($window_fit_height))
             fi
-            
             window_x_pos=$(($(($display_width - $window_fit_width)) / 2))
             window_y_pos=$(($(($(($display_height - $window_fit_height + $header_height - $footer_height)) / 2))))
             xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
@@ -201,37 +208,12 @@ function windowzoom () {
         fi
     fi
  }
- 
- function windowmove_l () {
 
-    window_new_x_pos=$2
-    window_new_y_pos=$(($window_y_pos - $4))
-    window_fit_height=$(($display_height - $1 - $3))
-
-    if [ "$window_name" != "Desktop — Plasma" ]; then
-        if [ $window_height -gt $window_fit_height ]; then
-            window_new_height=$window_fit_height
-            xdotool windowsize --sync $active_window_id $window_width $window_new_height
-        fi
-        if [ $window_x_pos -eq $2 ]; then
-            window_new_x_pos=$5
-        elif [ $window_x_pos -eq $5 ]; then
-            window_new_x_pos=$6
-        elif [ $window_x_pos -eq $6 ]; then
-            window_new_x_pos=$7
-        fi
-        if [ $4 -eq 0 ]; then
-            xdotool windowmove --sync $active_window_id $window_new_x_pos 'y'
-        else
-            xdotool windowmove --sync $active_window_id $window_new_x_pos $window_new_y_pos
-        fi
-    fi
+# Function windowmove moves the window left/right/centre with step adjustments for left/right by step pixel steps
+# parameters: $1 <top margin>, $2 <side margin>, $3 <bottom margin>,  $4 <GTK footer fix>,  $5 <horizontal step 1>,   $6 <step 2>,   $6 <step 3>, 
+# $6 <direction 0:left 1:right 2:center> 
+ function windowmove () {
  
- }
- 
- function windowmove_r () {
- 
-    window_new_x_pos=$(($display_width - $window_width - $2))
     window_new_y_pos=$(($window_y_pos - $4))
     window_fit_height=$(($display_height - $1 - $3))
 
@@ -241,12 +223,28 @@ function windowzoom () {
             window_new_height=$window_fit_height
             xdotool windowsize --sync $active_window_id $window_width $window_new_height
         fi
-        if [ $window_x_pos -eq $(($display_width - $window_width - $2)) ]; then
-            window_new_x_pos=$(($display_width - $window_width - $5))
-        elif [ $window_x_pos -eq $(($display_width - $window_width - $5)) ]; then
-            window_new_x_pos=$(($display_width - $window_width - $6))
-        elif [ $window_x_pos -eq $(($display_width - $window_width - $6)) ]; then
-            window_new_x_pos=$(($display_width - $window_width - $7))
+        if [ $8 -eq 0 ]; then
+            if [ $window_x_pos -eq $2 ]; then
+                window_new_x_pos=$5
+            elif [ $window_x_pos -eq $5 ]; then
+                window_new_x_pos=$6
+            elif [ $window_x_pos -eq $6 ]; then
+                window_new_x_pos=$7
+            else
+                window_new_x_pos=$2
+            fi 
+        elif [ $8 -eq 1 ]; then
+            if [ $window_x_pos -eq $(($display_width - $window_width - $2)) ]; then
+                window_new_x_pos=$(($display_width - $window_width - $5))
+            elif [ $window_x_pos -eq $(($display_width - $window_width - $5)) ]; then
+                window_new_x_pos=$(($display_width - $window_width - $6))
+            elif [ $window_x_pos -eq $(($display_width - $window_width - $6)) ]; then
+                window_new_x_pos=$(($display_width - $window_width - $7))
+            else
+                window_new_x_pos=$(($display_width - $window_width - $2))
+            fi
+        elif [ $8 -eq 2 ]; then
+            window_new_x_pos=$((($display_width - $window_width) /2 ))
         fi
         if [ $4 -eq 0 ]; then
             xdotool windowmove --sync $active_window_id $window_new_x_pos 'y'
@@ -257,27 +255,7 @@ function windowzoom () {
 
  }
 
-function windowcenter () {
-
-    window_x_pos=$((($display_width - $window_width) /2 ))
-    window_new_y_pos=$(($window_y_pos - $3))
-    window_fit_height=$(($display_height - $1 - $2))
-
-    if [ "$window_name" != "Desktop — Plasma" ];
-        then
-        if [ $window_height -gt $window_fit_height ]; then
-            window_new_height=$window_fit_height
-            xdotool windowsize --sync $active_window_id $window_width $window_new_height
-        fi
-        if [ $3 -eq 0 ]; then
-            xdotool windowmove --sync $active_window_id $window_x_pos 'y'
-        else
-            xdotool windowmove --sync $active_window_id $window_x_pos $window_new_y_pos
-        fi
-    fi
-
- }
- 
+# Function minimize minimizes all other windows other than the active window to clear screen clutter 
  function minimize () {
  
     active_window_id=$(xdotool getactivewindow)
@@ -290,22 +268,23 @@ function windowcenter () {
     done
  
  }
+ 
  # Selector for functions with parameter sets. These can be adjusted to suit personal perferences.
  case $1 in
     moveL )
-        windowmove_l 5 5 5 $footer_height 22 44 68
+        windowmove 5 5 5 $footer_height 23 46 70 0
     ;;
     moveR )
-        windowmove_r 5 5 5 $footer_height 22 44 68
+        windowmove 5 5 5 $footer_height 23 46 70 1
     ;;
     moveC )
-        windowcenter 5 5 $footer_height
+        windowmove 5 5 5 $footer_height 23 46 70 2
     ;;
     zoomP )
-        windowzoom 5 5 $gtk_fix 16 42 1
+        windowzoom 5 5 $gtk_fix 120 42 1
     ;;
     zoomM )
-        windowzoom 5 5 $gtk_fix 16 42 0
+        windowzoom 5 5 $gtk_fix 120 42 0
     ;;
     widthM )
         windowwidth $window_y_pos 5 42 0
