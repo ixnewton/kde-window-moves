@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Get the current window and desktop data
     active_window_id=$(xdotool getactivewindow)
     window_name=$(xdotool getwindowname $active_window_id)
     display_width=$(xdotool getdisplaygeometry | awk -F "[[:space:]]+" '/ /{print $1}')
@@ -8,8 +8,10 @@
     window_height=$(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:]x]+" '/Geometry:/{print $4}')
     window_y_pos=$(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:],]+" '/Position:/{print $4}')
     window_x_pos=$(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:],]+" '/Position:/{print $3}')
-    winQT=$(echo $window_name | grep -c  "— \|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular")
 
+    # Detect QT windows which do not need any position fiddles to compensate for windowmove positioning by frame coords for GTK built apps
+    # With QT windows we add header_height and for GTK both gtk_fix for header and footer_height to compensate for a dummy footer border! 
+    winQT=$(echo $window_name | grep -c  "— \|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular")
     if [ "$winQT" -eq 0 ]; then
         gtk_fix=20
         header_height=0
@@ -70,7 +72,7 @@ function windowtop () {
                 window_height=$window_fit_height
             fi
             xdotool windowsize --sync $active_window_id $window_width $window_height
-            xdotool windowmove $active_window_id 'x' $window_y_new_pos
+            xdotool windowmove --sync $active_window_id 'x' $window_y_new_pos
             
         else
             if [ $window_y_pos -ge $(($5 * 4 + $top_margin)) ]; then
@@ -90,8 +92,7 @@ function windowtop () {
                 window_height=$(($window_fit_height))
             fi
              xdotool windowsize --sync $active_window_id $window_width $window_height
-             xdotool windowmove $active_window_id 'x' $window_y_new_pos
-
+             xdotool windowmove --sync $active_window_id 'x' $window_y_new_pos
         fi
     fi
 }
@@ -170,7 +171,7 @@ function windowzoom () {
             window_x_pos=$(($(($display_width - $window_fit_width)) / 2))
             window_y_pos=$(($(($(($display_height - $window_fit_height + $header_height - $footer_height)) / 2))))
             xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
-            xdotool windowsize $active_window_id $window_fit_width $window_fit_height
+            xdotool windowsize --sync $active_window_id $window_fit_width $window_fit_height
               
         else
             if [ $window_width -ge  $(($window_fit_width))  ]; then
@@ -289,13 +290,13 @@ function windowcenter () {
     done
  
  }
- 
+ # Selector for functions with parameter sets. These can be adjusted to suit personal perferences.
  case $1 in
     moveL )
-        windowmove_l 5 5 5 $footer_height 20 40 60
+        windowmove_l 5 5 5 $footer_height 22 44 68
     ;;
     moveR )
-        windowmove_r 5 5 5 $footer_height 20 40 60
+        windowmove_r 5 5 5 $footer_height 22 44 68
     ;;
     moveC )
         windowcenter 5 5 $footer_height
