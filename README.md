@@ -30,9 +30,9 @@ Standard KDE global shortcuts group "kwin" can be given alternative key mappings
 
 The command parameters:
 
-`window-moves.sh moveR - Move right` - Moves window to right margin (5px) horizontally
+`window-moves.sh moveR - Move right` - Moves window to right margin (5px) horizontally with 3 margin steps
 
-`window-moves.sh moveL - Move left` - Moves window to left margin (5px) horizontally
+`window-moves.sh moveL - Move left` - Moves window to left margin (5px) horizontally with 3 margin steps
 
 `window-moves.sh moveC - Move center` - Moves window to center horizontally
 
@@ -50,7 +50,7 @@ The command parameters:
 
 `window-moves.sh topM - Top margin minus` - Adjusts top margin in steps of 40px
 
-`window-moves.sh topP - Top margin plus` - Adjusts top margin in steps of 40px  
+`window-moves.sh topP - Top margin plus` - Adjusts top margin in steps of 40px
 
-If the xdotool windowmove can be fixed to behave the same for QT or GTK windows then there would be no need for window detection and a position work around fix! 
+If the xdotool windowmove can be fixed to behave the same for QT or GTK windows then there would be no need for window detection and border work around fixes! 
 
