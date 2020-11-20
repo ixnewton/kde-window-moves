@@ -74,7 +74,7 @@ Uuid={3fe82c16-9514-49d2-8473-d1c6f1da6546}
 [Data_1_12]
 Comment=Comment
 Enabled=true
-Name=New Action
+Name=WindowZoom -
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_12Actions]
@@ -198,7 +198,7 @@ Uuid={be4d09f9-9684-4566-9b9c-3d4a5eca773d}
 [Data_1_5]
 Comment=Comment
 Enabled=true
-Name=Window center
+Name=WindowMove C
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_5Actions]

@@ -286,13 +286,13 @@ function windowzoom () {
  # Selector for functions with parameter sets. These can be adjusted to suit personal perferences.
  case $1 in
     moveL )
-        windowmove 5 5 5 $footer_height 23 46 70 0
+        windowmove 5 5 5 $footer_height 24 48 72 0
     ;;
     moveR )
-        windowmove 5 5 5 $footer_height 23 46 70 1
+        windowmove 5 5 5 $footer_height 24 48 72 1
     ;;
     moveC )
-        windowmove 5 5 5 $footer_height 23 46 70 2
+        windowmove 5 5 5 $footer_height 24 48 72 2
     ;;
     zoomP )
         windowzoom 5 5 $gtk_fix 120 42 1
