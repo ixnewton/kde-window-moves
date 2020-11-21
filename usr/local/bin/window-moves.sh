@@ -294,37 +294,37 @@ function windowzoom () {
  # Selector for functions with parameter sets. These can be adjusted to suit personal perferences.
  case $1 in
     moveL )
-        windowmove 5 5 4 $footer_height 24 48 72 0
+        windowmove $top_margin $side_margin $bottom_margin $footer_height 24 48 72 0
     ;;
     moveR )
-        windowmove 5 5 4 $footer_height 24 48 72 1
+        windowmove $top_margin $side_margin $bottom_margin $footer_height 24 48 72 1
     ;;
     moveC )
-        windowmove 5 5 4 $footer_height 24 48 72 2
+        windowmove $top_margin $side_margin $bottom_margin $footer_height 24 48 72 2
     ;;
     zoomP )
-        windowzoom 5 5 $gtk_fix 120 42 1
+        windowzoom $top_margin $side_margin $gtk_fix 120 42 1
     ;;
     zoomM )
-        windowzoom 5 5 $gtk_fix 120 42 0
+        windowzoom $top_margin $side_margin $gtk_fix 120 42 0
     ;;
     widthM )
-        windowwidth $window_y_pos 5 42 0
+        windowwidth $window_y_pos $side_margin 42 0
     ;;  
     widthP )
-        windowwidth $window_y_pos 5 42 1
+        windowwidth $window_y_pos $side_margin 42 1
     ;;  
     heightM )
-        windowheight 5 4 32 $gtk_fix 1
+        windowheight $top_margin $bottom_margin 32 $gtk_fix 1
     ;;  
     heightP )
-        windowheight 5 4 32 $gtk_fix 0
+        windowheight $top_margin $bottom_margin 32 $gtk_fix 0
     ;; 
     topP )
-        windowtop 5 4 $header_height $gtk_fix 21 1
+        windowtop $top_margin $bottom_margin $header_height $gtk_fix 21 1
     ;; 
     topM )
-        windowtop 5 4 $header_height $gtk_fix 21 0
+        windowtop $top_margin $bottom_margin $header_height $gtk_fix 21 0
     ;; 
     minimize )
         minimize
