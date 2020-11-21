@@ -9,18 +9,26 @@
     window_y_pos=$(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:],]+" '/Position:/{print $4}')
     window_x_pos=$(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:],]+" '/Position:/{print $3}')
 
+# Set margin and border sizes here:
+    top_margin=5            # provodes a comfortable close fit to top of screen
+    side_margin=5           # provides a comfortable close fit to sides. 
+    bottom_margin=4     # provides a comfortable close fit to bottom of screen. Increase by frame size 0 -10 (px) if frame borders are enabled
+    border_y=23               # The size of the window top frame added to window when positioning (QT)  and virtual bottom (GTK)
+    border_gtk=20           # The virtual offset size of window top frame for non QT windows ($gtk_fix)
+
 # Detect QT windows which do not need any position fiddles to compensate for windowmove positioning by frame coords for GTK built apps
 # With QT windows we add header_height and for GTK both gtk_fix for header and footer_height to compensate for a dummy footer border! 
-    echo $window_name
+    
     winQT=$(echo $window_name | grep -c  "— \|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice")
     winGTK=$(echo $window_name | grep -c  "Krusader/ -/ ROOT")
+
     if [ "$winQT" -eq 0 ] || [ "$winGTK" -gt 0 ] ; then
-        gtk_fix=20
+        gtk_fix=$border_gtk
         header_height=0
-        footer_height=23
+        footer_height=$border_y
     else
         gtk_fix=0
-        header_height=23
+        header_height=$border_y
         footer_height=0
     fi
 
@@ -286,13 +294,13 @@ function windowzoom () {
  # Selector for functions with parameter sets. These can be adjusted to suit personal perferences.
  case $1 in
     moveL )
-        windowmove 5 5 5 $footer_height 24 48 72 0
+        windowmove 5 5 4 $footer_height 24 48 72 0
     ;;
     moveR )
-        windowmove 5 5 5 $footer_height 24 48 72 1
+        windowmove 5 5 4 $footer_height 24 48 72 1
     ;;
     moveC )
-        windowmove 5 5 5 $footer_height 24 48 72 2
+        windowmove 5 5 4 $footer_height 24 48 72 2
     ;;
     zoomP )
         windowzoom 5 5 $gtk_fix 120 42 1
@@ -307,16 +315,16 @@ function windowzoom () {
         windowwidth $window_y_pos 5 42 1
     ;;  
     heightM )
-        windowheight 5 5 32 $gtk_fix 1
+        windowheight 5 4 32 $gtk_fix 1
     ;;  
     heightP )
-        windowheight 5 5 32 $gtk_fix 0
+        windowheight 5 4 32 $gtk_fix 0
     ;; 
     topP )
-        windowtop 5 5 $header_height $gtk_fix 21 1
+        windowtop 5 4 $header_height $gtk_fix 21 1
     ;; 
     topM )
-        windowtop 5 5 $header_height $gtk_fix 21 0
+        windowtop 5 4 $header_height $gtk_fix 21 0
     ;; 
     minimize )
         minimize
