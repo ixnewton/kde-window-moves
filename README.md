@@ -1,5 +1,5 @@
 # kde-window-moves
-A KDE window movement/resize/zoom/minimise script using xdotool for reference postioning of windows in KDE/Plasma 5 desktop
+A KDE window movement/resize/zoom/minimise script using xdotool for reference postioning of windows in KDE/Plasma 5 desktop on X11. xdotool has problems getting or setting QT windows under Wayland.
 
 At the outset the aim was to provide a reliable way to position windows with keyboard shorcuts. The discovery of xdotool gives the opportunity to automate some useful moves without too much sweat.
 
@@ -30,27 +30,29 @@ Standard KDE global shortcuts group "kwin" can be given alternative key mappings
 
 The command parameters:
 
-`window-moves.sh moveR - Move right` - Moves window to right margin (5px) horizontally with 3 margin steps
+`window-moves.sh moveR - Move right` - Moves window to right margin (5px) horizontally with 3 margin steps *
 
-`window-moves.sh moveL - Move left` - Moves window to left margin (5px) horizontally with 3 margin steps
+`window-moves.sh moveL - Move left` - Moves window to left margin (5px) horizontally with 3 margin steps *
 
-`window-moves.sh moveC - Move center` - Moves window to center horizontally
+`window-moves.sh moveC - Move center` - Moves window to center horizontally *
 
-`window-moves.sh zoomM - Zoom on center minus` - Zoom decreasing in 4 sequential steps
+`window-moves.sh zoomM - Zoom on center minus` - Zoom decreasing in 4 sequential steps *
 
-`window-moves.sh zoomP - Zoom on center plus` - Zoom incresing in 4 sequetial steps
+`window-moves.sh zoomP - Zoom on center plus` - Zoom incresing in 4 sequetial steps *
 
-`window-moves.sh widthM - Width minus` - Adjusts width centered or from edge 32 steps
+`window-moves.sh widthM - Width minus` - Adjusts width centered or from edge 32 steps *
 
-`window-moves.sh widthP - Width plus` - Adjusts width centered or from edge 32 steps
+`window-moves.sh widthP - Width plus` - Adjusts width centered or from edge 32 steps *
 
-`window-moves.sh heightM - Height minus` - Adjusts height of window bottom up in 16 steps
+`window-moves.sh heightM - Height minus` - Adjusts height of window bottom up in 16 steps *
 
-`window-moves.sh heightP - Height plus` - Adjusts height of window bottom in 16 steps
+`window-moves.sh heightP - Height plus` - Adjusts height of window bottom in 16 steps *
 
-`window-moves.sh topM - Top margin minus` - Adjusts top margin in steps of 40px
+`window-moves.sh topM - Top margin minus` - Adjusts top margin in steps of 40px *
 
-`window-moves.sh topP - Top margin plus` - Adjusts top margin in steps of 40px
+`window-moves.sh topP - Top margin plus` - Adjusts top margin in steps of 40px *
 
-If the xdotool windowmove can be fixed to behave the same for QT or GTK windows then there would be no need for window detection and border work around fixes! 
+`window-moves.sh minimize - Minimize all` - Minimizes all but the focussed window
+
+If the xdotool windowmove can be fixed to behave the same for QT or GTK windows then there would be no need for window detection and border work around fixes! In addition all but QT windows under Wayland currently work with the functions marked with * . 
 
