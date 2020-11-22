@@ -56,5 +56,5 @@ The command parameters:
 
 `window-moves.sh minimize - Minimize all` - Minimizes all but the focussed window
 
-If the xdotool windowmove can be fixed to behave the same for QT or GTK windows then there would be no need for window detection and border work around fixes! In addition all but QT windows under Wayland currently work with the functions marked with * . 
+If the xdotool windowmove can be fixed to behave the same for QT or GTK windows then there would be no need for window detection and border work around fixes! In addition all but QT windows under Wayland currently work with the functions marked with * . QT windows will require some fix to qt5-wayland or kwayland to provide proper Wayland support.
 
