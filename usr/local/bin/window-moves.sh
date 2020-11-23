@@ -124,7 +124,7 @@ function windowtop () {
             fi
              xdotool windowsize --sync $active_window_id $window_width $window_height
              xdotool windowmove --sync $active_window_id 'x' $window_y_new_pos
-             xdotool mousemove $pointer_x $(($pointer_y + $window_y_new_pos - $window_y_pos))
+             xdotool mousemove $pointer_x $(($pointer_y + $window_y_new_pos - $window_y_pos + $4))
         fi
     fi
 }
@@ -169,8 +169,7 @@ function windowwidth () {
                     fi
                     if [ $pointer_x -ge $(($window_x_new_pos + $window_new_width - $window_delta))  ]; then
                         xdotool mousemove $(($window_x_new_pos + $window_new_width - $window_delta)) $pointer_y
-                    fi
-                    if [ $pointer_x -le $(($window_x_new_pos + $window_delta))  ]; then
+                    elif [ $pointer_x -le $(($window_x_new_pos + $window_delta))  ]; then
                         xdotool mousemove $(($window_x_new_pos + $window_delta))  $pointer_y
                     fi
             fi        
@@ -318,13 +317,13 @@ function windowzoom () {
  # Selector for functions with parameter sets. These can be adjusted to suit personal perferences.
  case $1 in
     moveL )
-        windowmove $top_margin $side_margin $bottom_margin $footer_height 25 50 75 0
+        windowmove $top_margin $side_margin $bottom_margin $footer_height 20 40 60 0
     ;;
     moveR )
-        windowmove $top_margin $side_margin $bottom_margin $footer_height 25 50 75 1
+        windowmove $top_margin $side_margin $bottom_margin $footer_height 20 40 60 1
     ;;
     moveC )
-        windowmove $top_margin $side_margin $bottom_margin $footer_height 25 50 75 2
+        windowmove $top_margin $side_margin $bottom_margin $footer_height 20 40 60 2
     ;;
     zoomP )
         windowzoom $top_margin $side_margin $gtk_fix 120 42 1
@@ -345,10 +344,10 @@ function windowzoom () {
         windowheight $top_margin $bottom_margin 32 $gtk_fix 0
     ;; 
     topP )
-        windowtop $top_margin $bottom_margin $header_height $gtk_fix 21 1
+        windowtop $top_margin $bottom_margin $header_height $gtk_fix 20 1
     ;; 
     topM )
-        windowtop $top_margin $bottom_margin $header_height $gtk_fix 21 0
+        windowtop $top_margin $bottom_margin $header_height $gtk_fix 20 0
     ;; 
     minimize )
         minimize
