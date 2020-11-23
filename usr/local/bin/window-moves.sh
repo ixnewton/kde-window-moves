@@ -295,7 +295,7 @@ function windowzoom () {
             xdotool mousemove $(($pointer_x + $window_x_new_pos - $window_x_pos)) $pointer_y
         else
             xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
-            xdotool mousemove $(($pointer_x + $window_x_new_pos - $window_x_pos)) $(($pointer_y + $window_y_new_pos - $window_y_pos))
+            xdotool mousemove $(($pointer_x + $window_x_new_pos - $window_x_pos)) $pointer_y
         fi
     fi
 
@@ -318,13 +318,13 @@ function windowzoom () {
  # Selector for functions with parameter sets. These can be adjusted to suit personal perferences.
  case $1 in
     moveL )
-        windowmove $top_margin $side_margin $bottom_margin $footer_height 24 48 72 0
+        windowmove $top_margin $side_margin $bottom_margin $footer_height 25 50 75 0
     ;;
     moveR )
-        windowmove $top_margin $side_margin $bottom_margin $footer_height 24 48 72 1
+        windowmove $top_margin $side_margin $bottom_margin $footer_height 25 50 75 1
     ;;
     moveC )
-        windowmove $top_margin $side_margin $bottom_margin $footer_height 24 48 72 2
+        windowmove $top_margin $side_margin $bottom_margin $footer_height 25 50 75 2
     ;;
     zoomP )
         windowzoom $top_margin $side_margin $gtk_fix 120 42 1
@@ -345,10 +345,10 @@ function windowzoom () {
         windowheight $top_margin $bottom_margin 32 $gtk_fix 0
     ;; 
     topP )
-        windowtop $top_margin $bottom_margin $header_height $gtk_fix 20 1
+        windowtop $top_margin $bottom_margin $header_height $gtk_fix 21 1
     ;; 
     topM )
-        windowtop $top_margin $bottom_margin $header_height $gtk_fix 20 0
+        windowtop $top_margin $bottom_margin $header_height $gtk_fix 21 0
     ;; 
     minimize )
         minimize
