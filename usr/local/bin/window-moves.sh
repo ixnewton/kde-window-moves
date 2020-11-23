@@ -56,8 +56,8 @@ function windowheight () {
             fi
             xdotool windowsize --sync $active_window_id $window_width $window_new_height
             xdotool windowmove --sync $active_window_id 'x' $window_y_pos
-            if [ $(($pointer_y + $window_delta)) -ge $(($window_new_height + $window_y_pos + $2)) ]; then
-                        xdotool mousemove $pointer_x $(($pointer_y + $window_new_height - $window_height))
+            if [ $(($pointer_y + $window_delta)) -ge $(($window_new_height + $window_y_pos)) ]; then
+                xdotool mousemove $pointer_x $(($window_new_height + $window_y_pos - $window_delta))
             fi
     fi
 
@@ -152,7 +152,6 @@ function windowwidth () {
                     fi
                     xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
                     xdotool windowsize --sync $active_window_id $window_new_width $window_height
-                    xdotool mousemove $(($pointer_x + $window_x_new_pos - $window_x_pos)) $(($pointer_y + $window_y_new_pos - $window_y_pos))
             else
                     window_new_width=$(($window_width - $window_delta))
                     if [ $(($display_width - $window_width - $window_x_pos)) -le $(($window_delta / 2)) ]; then
@@ -163,10 +162,16 @@ function windowwidth () {
                     if [ $window_x_pos -lt $(($window_delta))  ]; then
                         window_x_new_pos=$2
                     fi
+
                     xdotool windowsize --sync $active_window_id $window_new_width $window_height
                     if [ $(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:]x]+" '/Geometry:/{print $3}') -ne  $window_width ]; then
                         xdotool windowmove --sync $active_window_id $window_x_pos $window_y_pos
-                        xdotool mousemove $(($pointer_x + $window_x_new_pos - $window_x_pos)) $(($pointer_y + $window_y_new_pos - $window_y_pos))
+                    fi
+                    if [ $pointer_x -ge $(($window_x_new_pos + $window_new_width - $window_delta))  ]; then
+                        xdotool mousemove $(($window_x_new_pos + $window_new_width - $window_delta)) $pointer_y
+                    fi
+                    if [ $pointer_x -le $(($window_x_new_pos + $window_delta))  ]; then
+                        xdotool mousemove $(($window_x_new_pos + $window_delta))  $pointer_y
                     fi
             fi        
     fi
@@ -209,7 +214,6 @@ function windowzoom () {
             window_y_new_pos=$(($(($(($display_height - $window_fit_height + $header_height - $footer_height)) / 2))))
             xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
             xdotool windowsize --sync $active_window_id $window_fit_width $window_fit_height
-            xdotool mousemove $(($display_width / 2)) $(($display_height / 2))
             
         else
             if [ $window_width -ge  $(($window_fit_width))  ]; then
@@ -235,8 +239,16 @@ function windowzoom () {
             window_y_new_pos=$(($(($(($display_height - $window_fit_height + $header_height - $footer_height)) / 2))))
             xdotool windowsize --sync $active_window_id $window_fit_width $window_fit_height
             xdotool windowmove $active_window_id $window_x_new_pos $window_y_new_pos
-            xdotool mousemove $(($display_width / 2)) $(($display_height / 2))
-            
+            if [ $pointer_x -ge $(($window_x_new_pos + $window_fit_width - $(($zoom_x_delta / 4)))) ]; then
+                pointer_x=$(($window_x_new_pos + $window_fit_width - $(($zoom_x_delta / 4))))
+            elif [ $pointer_x -le $(($window_x_new_pos + $(($zoom_x_delta / 4)))) ]; then
+                pointer_x=$(($window_x_new_pos + $(($zoom_x_delta / 4))))
+            elif [ $pointer_y -ge $(($window_y_new_pos + $window_fit_height - $zoom_y_delta))  ]; then
+                pointer_y=$(($window_y_new_pos + $window_fit_height - $(($zoom_y_delta / 2))))
+            elif [ $pointer_y -le $(($window_y_new_pos + $zoom_y_delta)) ]; then
+                pointer_y=$(($window_y_new_pos + $(($zoom_y_delta / 2))))
+            fi
+            xdotool mousemove $pointer_x $pointer_y
         fi
     fi
  }
