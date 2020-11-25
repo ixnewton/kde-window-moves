@@ -1,6 +1,6 @@
 #!/bin/bash
 # Get the current window and desktop data
-    active_window_id=$(xdotool getactivewindow)
+    active_window_id=$(xdotool getwindowfocus)
     window_name=$(xdotool getwindowname $active_window_id)
     display_width=$(xdotool getdisplaygeometry | awk -F "[[:space:]]+" '/ /{print $1}')
     display_height=$(xdotool getdisplaygeometry | awk -F "[[:space:]]+" '/ /{print $2}')
@@ -303,7 +303,7 @@ function windowzoom () {
 # Function minimize minimizes all other windows other than the active window to clear screen clutter 
  function minimize () {
  
-    active_window_id=$(xdotool getactivewindow)
+    active_window_id=$(xdotool getwindowfocus)
     for window_id in $(xdotool search --onlyvisible ".*")
     do
         if [ $window_id != $active_window_id ]
