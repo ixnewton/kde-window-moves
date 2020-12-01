@@ -272,21 +272,21 @@ function windowzoom () {
         fi
         if [ $8 -eq 0 ]; then
             if [ $window_x_pos -eq $2 ]; then
-                window_x_new_pos=$5
-            elif [ $window_x_pos -eq $5 ]; then
-                window_x_new_pos=$6
-            elif [ $window_x_pos -eq $6 ]; then
-                window_x_new_pos=$7
+                window_x_new_pos=$(($5 + $2))
+            elif [ $window_x_pos -eq $(($5 + $2)) ]; then
+                window_x_new_pos=$(($6 + $2))
+            elif [ $window_x_pos -eq $(($6 + $2)) ]; then
+                window_x_new_pos=$(($7 + $2))
             else
                 window_x_new_pos=$2
             fi 
         elif [ $8 -eq 1 ]; then
             if [ $window_x_pos -eq $(($display_width - $window_width - $2)) ]; then
-                window_x_new_pos=$(($display_width - $window_width - $5))
-            elif [ $window_x_pos -eq $(($display_width - $window_width - $5)) ]; then
-                window_x_new_pos=$(($display_width - $window_width - $6))
-            elif [ $window_x_pos -eq $(($display_width - $window_width - $6)) ]; then
-                window_x_new_pos=$(($display_width - $window_width - $7))
+                window_x_new_pos=$(($display_width - $window_width - $5 - $2))
+            elif [ $window_x_pos -eq $(($display_width - $window_width - $5 - $2)) ]; then
+                window_x_new_pos=$(($display_width - $window_width - $6 - $2))
+            elif [ $window_x_pos -eq $(($display_width - $window_width - $6 - $2)) ]; then
+                window_x_new_pos=$(($display_width - $window_width - $7 - $2))
             else
                 window_x_new_pos=$(($display_width - $window_width - $2))
             fi
