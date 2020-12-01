@@ -15,7 +15,7 @@
     top_margin=5            # provodes a comfortable close fit to top of screen
     side_margin=4           # provides a comfortable close fit to sides. 
     bottom_margin=4     # provides a comfortable close fit to bottom of screen. Increase by frame size 0 -10 (px) if frame borders are enabled
-    border_y=22               # The size of the window top frame added to window when positioning (QT)  and virtual bottom (GTK)
+    border_y=23               # The size of the window top frame added to window when positioning (QT)  and virtual bottom (GTK)
     border_gtk=20           # The virtual offset size of window top frame for non QT windows ($gtk_fix)
     margin_delta=21       # Step delta for left/right and top margin
     width_steps=42         # Step divider to width of screen width
@@ -293,13 +293,13 @@ function windowzoom () {
         elif [ $8 -eq 2 ]; then
             window_x_new_pos=$((($display_width - $window_width) /2 ))
         fi
-        if [ $4 -eq 0 ]; then
-            xdotool windowmove --sync $active_window_id $window_x_new_pos 'y'
-            xdotool mousemove $(($pointer_x + $window_x_new_pos - $window_x_pos)) $pointer_y
-        else
+#         if [ $4 -eq 0 ]; then
+#             xdotool windowmove --sync $active_window_id $window_x_new_pos 'y'
+#             xdotool mousemove $(($pointer_x + $window_x_new_pos - $window_x_pos)) $pointer_y
+#         else
             xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
             xdotool mousemove $(($pointer_x + $window_x_new_pos - $window_x_pos)) $pointer_y
-        fi
+#         fi
     fi
 
  }
