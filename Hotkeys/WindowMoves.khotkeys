@@ -41,7 +41,7 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_10Triggers0]
-Key=Ctrl+Shift+R
+Key=Ctrl+Shift+Down
 Type=SHORTCUT
 Uuid={5ff4dec0-5cb9-4486-baef-5678f96091e6}
 
@@ -165,7 +165,7 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_3Triggers0]
-Key=Ctrl+Shift+Up
+Key=Ctrl+Shift+E
 Type=SHORTCUT
 Uuid={334c338e-2f29-4a47-a6d9-559dae986b10}
 
@@ -191,7 +191,7 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_4Triggers0]
-Key=Ctrl+Shift+Down
+Key=Ctrl+Shift+R
 Type=SHORTCUT
 Uuid={be4d09f9-9684-4566-9b9c-3d4a5eca773d}
 
@@ -321,7 +321,7 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_9Triggers0]
-Key=Ctrl+Shift+E
+Key=Ctrl+Shift+Up
 Type=SHORTCUT
 Uuid={90dd2897-1169-4353-b71c-736820bbf19e}
 
