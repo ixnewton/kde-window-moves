@@ -12,7 +12,7 @@
     pointer_y=$(xdotool getmouselocation | awk -F "[[:space:]]" '//{print $2}' | awk -F "[:]" '//{print $2}')
 
 # Set margin and border sizes here:
-    top_margin=5            # provodes a comfortable close fit to top of screen
+    top_margin=4            # provodes a comfortable close fit to top of screen
     side_margin=4           # provides a comfortable close fit to sides. 
     bottom_margin=4     # provides a comfortable close fit to bottom of screen. Increase by frame size 0 -10 (px) if frame borders are enabled
     border_y=23               # The size of the window top frame added to window when positioning (QT)  and virtual bottom (GTK)
@@ -26,10 +26,16 @@
 # Detect QT windows which do not need any position fiddles to compensate for windowmove positioning by frame coords for GTK built apps
 # With QT windows we add header_height and for GTK both gtk_fix for header and footer_height to compensate for a dummy footer border! 
     
-    winQT=$(echo $window_name | grep -c  "— \|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice")
-    winGTK=$(echo $window_name | grep -c  "Krusader/ -/ ROOT")
-
-    if [ "$winQT" -eq 0 ] || [ "$winGTK" -gt 0 ] ; then
+    winQT=$(echo $window_name | grep -c  "— \|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice") # Apps with QT behaviour
+    winGTK=$(echo $window_name | grep -c  "Krusader/ -/ ROOT") # Force GTK behaviour for apps like Krusader as root
+    winOther=$(echo $window_name | grep -c  "Scanner") # To catch other apps which don't conform or behave
+    
+    if [ "$winOther" -gt 0 ] ; then
+        gtk_fix=0
+        side_margin=0
+        footer_height=0
+        header_height=0
+    elif [ "$winQT" -eq 0 ] || [ "$winGTK" -gt 0 ] ; then
         gtk_fix=$border_gtk
         header_height=0
         footer_height=$border_y
