@@ -22,14 +22,14 @@ Type=SIMPLE_ACTION_DATA
 [Data_1_10]
 Comment=Comment
 Enabled=true
-Name=WindowTop +
+Name=WindowZoom +
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_10Actions]
 ActionsCount=1
 
 [Data_1_10Actions0]
-CommandURL=window-moves.sh topP
+CommandURL=window-moves.sh zoomP
 Type=COMMAND_URL
 
 [Data_1_10Conditions]
@@ -41,21 +41,21 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_10Triggers0]
-Key=Ctrl+Shift+Down
+Key=Ctrl+Shift+W
 Type=SHORTCUT
-Uuid={5ff4dec0-5cb9-4486-baef-5678f96091e6}
+Uuid={3fe82c16-9514-49d2-8473-d1c6f1da6546}
 
 [Data_1_11]
 Comment=Comment
 Enabled=true
-Name=WindowZoom
+Name=WindowZoom -
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_11Actions]
 ActionsCount=1
 
 [Data_1_11Actions0]
-CommandURL=window-moves.sh zoomP
+CommandURL=window-moves.sh zoomM
 Type=COMMAND_URL
 
 [Data_1_11Conditions]
@@ -67,21 +67,21 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_11Triggers0]
-Key=Ctrl+Shift+W
+Key=Ctrl+Shift+Q
 Type=SHORTCUT
-Uuid={3fe82c16-9514-49d2-8473-d1c6f1da6546}
+Uuid={7691b73e-c747-4265-acf6-e5b7bcb5d73c}
 
 [Data_1_12]
 Comment=Comment
 Enabled=true
-Name=WindowZoom -
+Name=MinimizeAll
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_12Actions]
 ActionsCount=1
 
 [Data_1_12Actions0]
-CommandURL=window-moves.sh zoomM
+CommandURL=window-moves.sh minimize
 Type=COMMAND_URL
 
 [Data_1_12Conditions]
@@ -93,9 +93,9 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_12Triggers0]
-Key=Ctrl+Shift+Q
+Key=Ctrl+Shift+M
 Type=SHORTCUT
-Uuid={7691b73e-c747-4265-acf6-e5b7bcb5d73c}
+Uuid={58a733f5-f50d-4955-8ec0-0dbd5a12f143}
 
 [Data_1_1Actions]
 ActionsCount=1
@@ -113,7 +113,7 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_1Triggers0]
-Key=Ctrl+<
+Key=Ctrl+Shift+O
 Type=SHORTCUT
 Uuid={2346aa34-6ae8-42d2-9385-bbe1bb6fb0ca}
 
@@ -139,7 +139,7 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_2Triggers0]
-Key=Ctrl+>
+Key=Ctrl+Shift+P
 Type=SHORTCUT
 Uuid={4ddd009c-6015-42b0-8a81-011a2514c75b}
 
@@ -276,14 +276,14 @@ Uuid={91accfa7-3975-479a-af8d-74436c453281}
 [Data_1_8]
 Comment=Comment
 Enabled=true
-Name=MinimizeAll
+Name=WindowTop -
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_8Actions]
 ActionsCount=1
 
 [Data_1_8Actions0]
-CommandURL=window-moves.sh minimize
+CommandURL=window-moves.sh topM
 Type=COMMAND_URL
 
 [Data_1_8Conditions]
@@ -295,21 +295,21 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_8Triggers0]
-Key=Ctrl+Shift+M
+Key=Ctrl+Shift+Up
 Type=SHORTCUT
-Uuid={58a733f5-f50d-4955-8ec0-0dbd5a12f143}
+Uuid={90dd2897-1169-4353-b71c-736820bbf19e}
 
 [Data_1_9]
 Comment=Comment
 Enabled=true
-Name=WindowTop -
+Name=WindowTop +
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_9Actions]
 ActionsCount=1
 
 [Data_1_9Actions0]
-CommandURL=window-moves.sh topM
+CommandURL=window-moves.sh topP
 Type=COMMAND_URL
 
 [Data_1_9Conditions]
@@ -321,10 +321,11 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_9Triggers0]
-Key=Ctrl+Shift+Up
+Key=Ctrl+Shift+Down
 Type=SHORTCUT
-Uuid={90dd2897-1169-4353-b71c-736820bbf19e}
+Uuid={5ff4dec0-5cb9-4486-baef-5678f96091e6}
 
 [Main]
-AllowMerge=false
+AllowMerge=true
+ImportId=9876543210
 Version=2
