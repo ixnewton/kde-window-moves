@@ -19,7 +19,7 @@ The set of example key combinations can be a starting point for any preferred sc
 
 The scripts should be placed in /usr/local/bin and set executable 755
 
-Using the KDE System Settings > Shortcuts > Custom Shortcuts dialogue import the WindowMoves.khotkeys file to create a keymapping group. Due to rework of how shortcuts are set for applications Custom Shortcuts has become effectively an additional application. It may be necessary reset to defaults all shortcuts and reload custom shortcut groups/folders from saved .khotkeys files. Once backups are saved delete "Custom Shortcuts" in the System part of Shortcuts then set all shortcuts to defaults. Re-apply saved shortcut files including WindowMoves.khotkeys and all should be well. In my case this resolved non functional Ctrl+Z, Ctrl+X, Ctrl+Y shortcuts in key editors like Kate.   
+Using the KDE System Settings > Shortcuts > Custom Shortcuts dialogue import the WindowMoves.khotkeys file to create a keymapping group. Due to rework of how shortcuts are set for applications "Custom Shortcuts" has become effectively an additional application. To get everything working the new way it may be necessary reset to defaults the main shortcuts and reload custom shortcut groups/folders from saved .khotkeys files. Once backups of your custom shortcuts are saved delete "Custom Shortcuts" in the "System" part of Shortcuts then set all shortcuts to defaults. To restore custom shortcuts re-apply saved shortcut files including WindowMoves.khotkeys and all should be well. In my case this resolved non functional Ctrl+Z, Ctrl+X, Ctrl+Y shortcuts in key editors like Kate.   
 
 The mapping scheme:
 
