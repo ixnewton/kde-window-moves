@@ -25,7 +25,7 @@ The mapping scheme:
 
 All actions: `<Ctrl> + <Shift> + ...`
   
-The above combinations with navigation keys `<Left> <Right> <Up> <Down> c (center) < (width -) > (width +)` are reasonably intuitive to learn.   
+The above combinations with navigation keys `<Left> <Right> <Up> <Down> c (center) { (width -) } (width +)` are reasonably intuitive to learn.   
 In addition the script to minimze all windows except the one in focus has been set as `<Ctrl> + <Shift> + m `. Window zoom is implemented in 5 steps either increasing as `<Ctrl> + <Shift> + w ` and decreasing `<Ctrl> + <Shift> + q ` and top Window margin implemented in 5 steps either increasing as `<Ctrl> + <Shift> + r ` and decreasing `<Ctrl> + <Shift> + e ` these are less obvious keys but unused by other apps or KDE. 
 
 Standard KDE global shortcuts group "kwin" can be given alternative key mappings for instance minimize window `<Ctrl> + <Shift> + n ` and close window `<Ctrl> + <Shift> + b ` to be in line with this scheme.
