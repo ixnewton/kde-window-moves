@@ -28,11 +28,11 @@
     
     winQT=$(echo $window_name | grep -c  "— \|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice") # Apps with QT behaviour
     winGTK=$(echo $window_name | grep -c  "Krusader/ -/ ROOT") # Force GTK behaviour for apps like Krusader as root
-    winOther=$(echo $window_name | grep -c  "Scanner") # To catch other apps which don't conform or behave
+    winOther=$(echo $window_name | grep -c  "Scanner\|Twitter\|Maps") # To catch other apps which don't conform or behave including headless Chrome windows saved as shortcuts
     
     if [ "$winOther" -gt 0 ] ; then
         gtk_fix=0
-        side_margin=0
+#       side_margin=
         footer_height=0
         header_height=0
     elif [ "$winQT" -eq 0 ] || [ "$winGTK" -gt 0 ] ; then
@@ -276,27 +276,27 @@ function windowzoom () {
             window_new_height=$window_fit_height
             xdotool windowsize --sync $active_window_id $window_width $window_new_height
         fi
-        if [ $8 -eq 0 ]; then
+        if [ $9 -eq 0 ]; then
             if [ $window_x_pos -eq $2 ]; then
-                window_x_new_pos=$(($5 + $2))
-            elif [ $window_x_pos -eq $(($5 + $2)) ]; then
                 window_x_new_pos=$(($6 + $2))
             elif [ $window_x_pos -eq $(($6 + $2)) ]; then
                 window_x_new_pos=$(($7 + $2))
+            elif [ $window_x_pos -eq $(($7 + $2)) ]; then
+                window_x_new_pos=$(($8 + $2))
             else
                 window_x_new_pos=$2
             fi 
-        elif [ $8 -eq 1 ]; then
+        elif [ $9 -eq 1 ]; then
             if [ $window_x_pos -eq $(($display_width - $window_width - $2)) ]; then
-                window_x_new_pos=$(($display_width - $window_width - $5 - $2))
-            elif [ $window_x_pos -eq $(($display_width - $window_width - $5 - $2)) ]; then
                 window_x_new_pos=$(($display_width - $window_width - $6 - $2))
             elif [ $window_x_pos -eq $(($display_width - $window_width - $6 - $2)) ]; then
                 window_x_new_pos=$(($display_width - $window_width - $7 - $2))
+            elif [ $window_x_pos -eq $(($display_width - $window_width - $7 - $2)) ]; then
+                window_x_new_pos=$(($display_width - $window_width - $8 - $2))
             else
                 window_x_new_pos=$(($display_width - $window_width - $2))
             fi
-        elif [ $8 -eq 2 ]; then
+        elif [ $9 -eq 2 ]; then
             window_x_new_pos=$((($display_width - $window_width) /2 ))
         fi
 #         if [ $4 -eq 0 ]; then
@@ -327,13 +327,13 @@ function windowzoom () {
  # Selector for functions with parameter sets. These can be adjusted to suit personal perferences.
  case $1 in
     moveL )
-        windowmove $top_margin $side_margin $bottom_margin $footer_height $margin_delta $(($margin_delta * 2)) $(($margin_delta * 3)) 0
+        windowmove $top_margin $side_margin $bottom_margin $footer_height $gtk_fix $margin_delta $(($margin_delta * 2)) $(($margin_delta * 3)) 0
     ;;
     moveR )
-        windowmove $top_margin $side_margin $bottom_margin $footer_height $margin_delta $(($margin_delta * 2)) $(($margin_delta * 3)) 1
+        windowmove $top_margin $side_margin $bottom_margin $footer_height $gtk_fix $margin_delta $(($margin_delta * 2)) $(($margin_delta * 3)) 1
     ;;
     moveC )
-        windowmove $top_margin $side_margin $bottom_margin $footer_height 0 0 0 2
+        windowmove $top_margin $side_margin $bottom_margin $footer_height $gtk_fix 0 0 0 2
     ;;
     zoomP )
         windowzoom $top_margin $side_margin $gtk_fix $width_delta $height_delta 1
