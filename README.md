@@ -1,7 +1,7 @@
 # kde-window-moves
 A KDE window movement/resize/zoom/minimise script using xdotool for reference postioning of windows in KDE/Plasma 5 desktop on X11. xdotool has problems getting or setting QT windows under Wayland.
 
-At the outset the aim was to provide a reliable way to position windows with keyboard shorcuts. The discovery of xdotool gives the opportunity to automate some useful moves without too much sweat.
+At the outset the aim was to provide a reliable way to position windows with keyboard shorcuts using KDE's khotkeys. The discovery of xdotool gives the opportunity to automate some useful moves without too much sweat.
 
 I like to have windows aligned left, right or centred but not neccesarily full screen in a repeatable way. Removing the fiddle of mouse or trackpad actions to grab the window and move or resize. Equally I like to clear the clutter on the desktop and minimise all open windows except the window currently in focus or minimise any window under the cursor focus. I have tried to assign consistent intuitive key combinations for any of these actions.
 
