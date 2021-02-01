@@ -15,8 +15,8 @@
     top_margin=4            # provodes a comfortable close fit to top of screen
     side_margin=4           # provides a comfortable close fit to sides. 
     bottom_margin=4     # provides a comfortable close fit to bottom of screen. Increase by frame size 0 -10 (px) if frame borders are enabled
-    border_y=23               # The size of the window top frame added to window when positioning (QT)  and virtual bottom (GTK)
-    border_gtk=20           # The virtual offset size of window top frame for non QT windows ($gtk_fix)
+    border_y=29               # The size of the window top frame added to window when positioning (QT)  and virtual bottom (GTK)
+    border_gtk=29           # The virtual offset size of window top frame for non QT windows ($gtk_fix)
     margin_delta=21       # Step delta for left/right and top margin
     width_steps=42         # Step divider to width of screen width
     height_steps=32        # Step divider to height of screen height
@@ -26,18 +26,17 @@
 # Detect QT windows which do not need any position fiddles to compensate for windowmove positioning by frame coords for GTK built apps
 # With QT windows we add header_height and for GTK both gtk_fix for header and footer_height to compensate for a dummy footer border! 
     
-    winQT=$(echo $window_name | grep -c  "— \|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice") # Apps with QT behaviour
+    winQT=$(echo $window_name | grep -c  "— \|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice\|Telegram") # Apps with QT behaviour
     winGTK=$(echo $window_name | grep -c  "Krusader/ -/ ROOT") # Force GTK behaviour for apps like Krusader as root
-    winOther=$(echo $window_name | grep -c  "Scanner\|Twitter\|Maps") # To catch other apps which don't conform or behave including headless Chrome windows saved as shortcuts
+    winOther=$(echo $window_name | grep -c  "Scanner\|Twitter\|Maps\|iPlayer\|Calendar\|Photos\|Podcasts\|WhatsApp") # To catch other apps which don't conform or behave including headless Chrome windows saved as shortcuts
     
     if [ "$winOther" -gt 0 ] ; then
         gtk_fix=0
-#       side_margin=
         footer_height=0
         header_height=0
     elif [ "$winQT" -eq 0 ] || [ "$winGTK" -gt 0 ] ; then
         gtk_fix=$border_gtk
-        header_height=0
+        header_height=$border_gtk
         footer_height=$border_y
     else
         gtk_fix=0
@@ -79,7 +78,7 @@ function windowheight () {
 function windowtop () {
 
     window_fit_pos=$(( $display_height - $2 - $2 ))
-    top_margin=$(($1 + $3 + $4)) 
+    top_margin=$(($1 + $3)) 
     top_offset=$(($top_margin - $4))
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
@@ -267,7 +266,7 @@ function windowzoom () {
 # $6 <direction 0:left 1:right 2:center> 
  function windowmove () {
  
-    window_y_new_pos=$(($window_y_pos - $4))
+    window_y_new_pos=$(($window_y_pos - $5))
     window_fit_height=$(($display_height - $1 - $3))
 
     if [ "$window_name" != "Desktop — Plasma" ];
