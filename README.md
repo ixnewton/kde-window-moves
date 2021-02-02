@@ -9,7 +9,7 @@ There are some issues not yet resolved as the KDE environment supports native QT
 
 One thing I use to help unify the appearance and to some extent behaviour of GTK styled windows is gtk3-nocsd which replaces any GTK header with the desktop QT style. This should be installed to work with the latest update of window-moves.sh. Available from your package manager (pacman, yum, apt etc) or https://github.com/PCMan/gtk3-nocsd .   
 
-I favour minimal window borders with only an 18px header with borderless sides and bottom, one of the nicer style things nicked from MacOS! There may be position issues if side/bottom borders are used as an additional margin fix would have to be applied for the left window border of GTK windows. 
+I favour minimal window borders with only the header and borderless sides and footer, one of the nicer style ideas we can copy from MacOS! There may be position issues if side/bottom borders are used as an additional margin fix would have to be applied for the left window border of GTK windows. 
 
 One behaviour implemented in widthM/widthP/winTop is that left, right and bottom edges are sticky so when a window is close to the margin zone this edge is static and expansion is then relative to the "sticky" edge.
 
