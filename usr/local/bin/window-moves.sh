@@ -11,7 +11,7 @@
     pointer_x=$(xdotool getmouselocation | awk -F "[[:space:]]" '//{print $1}' | awk -F "[:]" '//{print $2}')
     pointer_y=$(xdotool getmouselocation | awk -F "[[:space:]]" '//{print $2}' | awk -F "[:]" '//{print $2}')
 
-# Set margin and border sizes here:
+# Current set of margin and border sizes with gtk3-nocsd installed:
     top_margin=4            # provodes a comfortable close fit to top of screen
     side_margin=4           # provides a comfortable close fit to sides. 
     bottom_margin=4     # provides a comfortable close fit to bottom of screen. Increase by frame size 0 -10 (px) if frame borders are enabled
@@ -23,6 +23,18 @@
     width_delta=120        # X delta zoom step
     height_delta=42         # Y delta zoom step
 
+# Alternative set of margin and border sizes without gtk3-nocsd installed
+#     top_margin=4            # provodes a comfortable close fit to top of screen
+#     side_margin=4           # provides a comfortable close fit to sides. 
+#     bottom_margin=4     # provides a comfortable close fit to bottom of screen. Increase by frame size 0 -10 (px) if frame borders are enabled
+#     border_y=23               # The size of the window top frame added to window when positioning (QT)  and virtual bottom (GTK)
+#     border_gtk=20           # The virtual offset size of window top frame for non QT windows ($gtk_fix)
+#     margin_delta=21       # Step delta for left/right and top margin
+#     width_steps=42         # Step divider to width of screen width
+#     height_steps=32        # Step divider to height of screen height
+#     width_delta=120        # X delta zoom step
+#     height_delta=42         # Y delta zoom step    
+    
 # Detect QT windows which do not need any position fiddles to compensate for windowmove positioning by frame coords for GTK built apps
 # With QT windows we add header_height and for GTK both gtk_fix for header and footer_height to compensate for a dummy footer border! 
     
