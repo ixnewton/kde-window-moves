@@ -39,7 +39,7 @@
 # With QT windows we add header_height and for GTK both gtk_fix for header and footer_height to compensate for a dummy footer border! 
     
     winQT=$(echo $window_name | grep -c  "— \|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice\|Telegram") # Apps with QT behaviour
-    winGTK=$(echo $window_name | grep -c  "Krusader/ -/ ROOT") # Force GTK behaviour for apps like Krusader as root
+    winGTK=$(echo $window_name | grep -c  "Krusader/ -/ ROOT\|Mozilla") # Force GTK behaviour for apps like Krusader as root
     winOther=$(echo $window_name | grep -c  "Scanner\|Twitter\|Maps\|iPlayer\|Calendar\|Photos\|Podcasts\|WhatsApp") # To catch other apps which don't conform or behave including headless Chrome windows saved as shortcuts
     
     if [ "$winOther" -gt 0 ] ; then
