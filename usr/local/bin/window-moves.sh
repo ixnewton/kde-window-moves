@@ -102,9 +102,6 @@ function windowtop () {
             if [ $window_height -gt $window_fit_height ] || [ $window_base_pos -gt $window_fit_pos ] ; then
                 window_height=$window_fit_height
             fi
-            xdotool windowsize --sync $active_window_id $window_width $window_height
-            xdotool windowmove --sync $active_window_id 'x' $window_y_new_pos
-            xdotool mousemove $pointer_x $(($pointer_y + $window_y_new_pos - $window_y_pos + $4))
         else
              if [ $y_multiplier -lt 2 ]; then
                     window_y_new_pos=$top_offset
@@ -116,10 +113,11 @@ function windowtop () {
             if [ $window_height -gt $window_fit_height ] || [ $window_base_pos -gt $window_fit_pos ] ; then
                 window_height=$(($window_fit_height))
             fi
-             xdotool windowsize --sync $active_window_id $window_width $window_height
-             xdotool windowmove --sync $active_window_id 'x' $window_y_new_pos
-             xdotool mousemove $pointer_x $(($pointer_y + $window_y_new_pos - $window_y_pos + $4))
+
         fi
+        xdotool windowsize --sync $active_window_id $window_width $window_height
+        xdotool windowmove --sync $active_window_id 'x' $window_y_new_pos
+        xdotool mousemove $pointer_x $(($pointer_y + $window_y_new_pos - $window_y_pos + $4))
     fi
 
 }
