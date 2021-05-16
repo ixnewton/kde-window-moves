@@ -90,7 +90,6 @@ function windowheight () {
 function windowtop () {
 
     y_multiplier=$(( $(($window_y_pos - $1 - $3)) / $5 ))
-# echo "Delta Position - " $window_y_pos " - " $y_multiplier " - " $6
     window_fit_pos=$(( $display_height - $1 - $2 ))
     top_margin=$(($1 + $3)) 
     top_offset=$(($top_margin - $4))
@@ -122,6 +121,7 @@ function windowtop () {
              xdotool mousemove $pointer_x $(($pointer_y + $window_y_new_pos - $window_y_pos + $4))
         fi
     fi
+
 }
 
 
@@ -246,7 +246,8 @@ function windowzoom () {
             xdotool mousemove $pointer_x $pointer_y
         fi
     fi
- }
+
+}
 
 # Function windowmove moves the window left/right/centre with step adjustments for left/right by step pixel steps
 # parameters: $1 <top margin>, $2 <side margin>, $3 <bottom margin>,  $4 <GTK footer fix>,  $5 <horizontal step 1>,   $6 <step 2>,   $6 <step 3>, 
