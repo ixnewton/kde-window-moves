@@ -89,29 +89,15 @@ function windowheight () {
 # parameters: $1 <top margin>, $2 <side margin>, $3 <window header>,  $4 <GTK header fix>, $4 <step in pixels>, $5 <direction 1=increase> 
 function windowtop () {
 
-    window_fit_pos=$(( $display_height - $2 - $2 ))
+    y_multiplier=$(( $(($window_y_pos - $1 - $3)) / $5 ))
+# echo "Delta Position - " $window_y_pos " - " $y_multiplier " - " $6
+    window_fit_pos=$(( $display_height - $1 - $2 ))
     top_margin=$(($1 + $3)) 
     top_offset=$(($top_margin - $4))
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
         if  [ $6 -eq 1 ]; then
-            if [ $window_y_pos -lt $(($5 + $top_margin)) ]; then
-                window_y_new_pos=$(( $top_offset + $5))
-            elif [ $window_y_pos -lt $(($5 * 2 + $top_margin)) ]; then
-                window_y_new_pos=$(($5 * 2 + $top_offset))     
-            elif [ $window_y_pos -lt $(($5 * 3 + $top_margin)) ]; then
-                window_y_new_pos=$(($5 * 3 + $top_offset))    
-            elif [ $window_y_pos -lt $(($5 * 4 + $top_margin)) ]; then
-                window_y_new_pos=$(($5 * 4 + $top_offset))
-            elif [ $window_y_pos -lt $(($5 * 5 + $top_margin)) ]; then
-                window_y_new_pos=$(($5 * 5 + $top_offset))
-            elif [ $window_y_pos -lt $(($5 * 6 + $top_margin)) ]; then
-                window_y_new_pos=$(($5 * 6 + $top_offset))
-            elif [ $window_y_pos -lt $(($5 * 7 + $top_margin)) ]; then
-                window_y_new_pos=$(($5 * 7 + $top_offset))
-            else
-                window_y_new_pos=$(($5 * 7 + $top_offset))
-            fi
+            window_y_new_pos=$(( $(($(($y_multiplier + 1)) * $5)) + $top_offset)) 
             window_base_pos=$(( $window_height + $window_y_pos))
             window_fit_height=$(($display_height - $window_y_new_pos - $2 - $footer_height))
             if [ $window_height -gt $window_fit_height ] || [ $window_base_pos -gt $window_fit_pos ] ; then
@@ -119,25 +105,12 @@ function windowtop () {
             fi
             xdotool windowsize --sync $active_window_id $window_width $window_height
             xdotool windowmove --sync $active_window_id 'x' $window_y_new_pos
-            xdotool mousemove $pointer_x $(($pointer_y + $window_y_new_pos - $window_y_pos))
-            
+            xdotool mousemove $pointer_x $(($pointer_y + $window_y_new_pos - $window_y_pos + $4))
         else
-            if [ $window_y_pos -ge $(($5 * 7 + $top_margin)) ]; then
-                window_y_new_pos=$(($5 * 6 + $top_offset))
-            elif [ $window_y_pos -ge $(($5 * 6 + $top_margin)) ]; then
-                window_y_new_pos=$(($5 * 5 + $top_offset))
-            elif [ $window_y_pos -ge $(($5 * 5 + $top_margin)) ]; then
-                window_y_new_pos=$(($5 * 4 + $top_offset))
-            elif [ $window_y_pos -ge $(($5 * 4 + $top_margin)) ]; then
-                window_y_new_pos=$(($5 * 3 + $top_offset))   
-            elif [ $window_y_pos -ge $(($5 * 3 + $top_margin)) ]; then
-                window_y_new_pos=$(($5 * 2 + $top_offset)) 
-            elif [ $window_y_pos -ge $(($5 * 2 + $top_margin)) ]; then
-                window_y_new_pos=$(($5 + $top_offset))
-            elif [ $window_y_pos -ge $(($5 + $top_margin)) ]; then
-                window_y_new_pos=$(($top_offset))
+             if [ $y_multiplier -lt 2 ]; then
+                    window_y_new_pos=$top_offset
             else
-                window_y_new_pos=$(($top_offset))
+                    window_y_new_pos=$(( $(($(($y_multiplier - 1)) * $5)) + $top_offset))
             fi
             window_base_pos=$(( $window_height + $window_y_pos))
             window_fit_height=$(($display_height - $window_y_new_pos - $2 - $footer_height))
@@ -150,6 +123,8 @@ function windowtop () {
         fi
     fi
 }
+
+
 
 # Function windowwidth provides a width expand/contract function in steps proportional to screen width
 # parameters: $1 <window_y_pos>, $2 <side margin>, $3 <width step delta>, $4 <direction 1=increase> 
@@ -366,10 +341,10 @@ function windowzoom () {
     ;; 
     topP )
         windowtop $top_margin $bottom_margin $header_height $gtk_fix $margin_delta 1
-    ;; 
+        ;; 
     topM )
         windowtop $top_margin $bottom_margin $header_height $gtk_fix $margin_delta 0
-    ;; 
+        ;;
     minimize )
         minimize
     ;;    
