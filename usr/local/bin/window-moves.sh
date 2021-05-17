@@ -89,7 +89,7 @@ function windowheight () {
 # parameters: $1 <top margin>, $2 <side margin>, $3 <window header>,  $4 <GTK header fix>, $4 <step in pixels>, $5 <direction 1=increase> 
 function windowtop () {
 
-    y_multiplier=$(( $(($window_y_pos - $1 - $3)) / $5 ))
+    y_multiplier=$(($(($window_y_pos - $1 - $3)) / $5 ))
     window_fit_pos=$(( $display_height - $1 - $2 ))
     top_margin=$(($1 + $3)) 
     top_offset=$(($top_margin - $4))
@@ -103,7 +103,7 @@ function windowtop () {
                 window_height=$window_fit_height
             fi
         else
-             if [ $y_multiplier -lt 2 ]; then
+             if [ $y_multiplier -eq 0 ]; then
                     window_y_new_pos=$top_offset
             else
                     window_y_new_pos=$(( $(($(($y_multiplier - 1)) * $5)) + $top_offset))
@@ -113,7 +113,6 @@ function windowtop () {
             if [ $window_height -gt $window_fit_height ] || [ $window_base_pos -gt $window_fit_pos ] ; then
                 window_height=$(($window_fit_height))
             fi
-
         fi
         xdotool windowsize --sync $active_window_id $window_width $window_height
         xdotool windowmove --sync $active_window_id 'x' $window_y_new_pos
