@@ -175,7 +175,7 @@ function windowzoom () {
     window_fit_height=$(($display_height - $1 - $1 - $3))
     window_fit_width=$(($display_width - $2 - $2))
     window_min_width=800
-    window_min_height=600
+    window_min_height=450
     zoom_y_delta=$5
     zoom_x_delta=$(($(($window_width * $5)) / $window_height))
     top_margin=$(($1 + $3)) 
