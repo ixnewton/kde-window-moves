@@ -38,15 +38,14 @@
 # Detect QT windows which do not need any position fiddles to compensate for windowmove positioning by frame coords for GTK built apps
 # With QT windows we add header_height and for GTK both gtk_fix for header and footer_height to compensate for a dummy footer border! 
     
-    winQT=$(echo $window_name | grep -c  "—\|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice\|Telegram") # Apps with QT behaviour
-    winGTK=$(echo $window_name | grep -c  "Krusader/ -/ ROOT\|Mozilla") # Force GTK behaviour for apps like Krusader as root
+    winQT=$(echo $window_name | grep -c  "—\|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice\|Telegram\|Krusader/ -/ ROOT") # Apps with QT behaviour
     winOther=$(echo $window_name | grep -c  "Scanner\|Twitter\|Maps\|iPlayer\|Calendar\|Photos\|Podcasts\|WhatsApp") # To catch other apps which don't conform or behave including headless Chrome windows saved as shortcuts
     
     if [ "$winOther" -gt 0 ] ; then
         gtk_fix=0
         footer_height=0
         header_height=0
-    elif [ "$winQT" -eq 0 ] || [ "$winGTK" -gt 0 ] ; then
+    elif [ "$winQT" -eq 0 ] ; then
         gtk_fix=$border_gtk
         header_height=$border_gtk
         footer_height=$border_y
@@ -86,7 +85,7 @@ function windowheight () {
 }
 
 # Function windowtop provides a top margin expand/contract function in steps by pixel amaount
-# parameters: $1 <top margin>, $2 <side margin>, $3 <window header>,  $4 <GTK header fix>, $4 <step in pixels>, $5 <direction 1=increase> 
+# parameters: $1 <top margin>, $2 <side margin>, $3 <window header>,  $4 <GTK header fix>, $5 <step in pixels>, $6 <direction 1=increase> 
 function windowtop () {
 
     y_multiplier=$(($(($window_y_pos - $1 - $3)) / $5 ))
@@ -171,77 +170,76 @@ function windowwidth () {
 }
 
 # Function windowzoom provides a zoom function centered and proportional to the screen size
-# parameters: $1 <top margin>, $2 <side margin>, $3 <GTK header fix>,  $4 <horizontal step delta>, $5 <vertical step delta>, $6 <direction 1=increase> 
+# parameters: $1 <top margin>, $2 <side margin>, $3 <window header>, $4 <GTK header fix> ,  $5 <horizontal step delta>, $6 <vertical step delta>, $7 <direction 1=increase> 
 function windowzoom () {
 
-    window_x_pos=$2
-    window_y_pos=$(($1 + $header_height))
-    window_fit_height=$(($display_height - $1 - $2 - $3 - $header_height))
+    window_fit_height=$(($display_height - $1 - $1 - $3))
     window_fit_width=$(($display_width - $2 - $2))
-    zoom_y_delta=$5
-    zoom_x_delta=$4
+    window_min_width=800
+    window_min_height=600
+    zoom_y_delta=$6
+    zoom_x_delta=$5
+    top_margin=$(($1 + $3)) 
+    top_offset=$(($top_margin - $4))
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
-        if  [ $6 -eq 1 ]; then
-            if [ $window_width -le  $(($window_fit_width - $(($zoom_x_delta * 5)))) ]; then            
-                window_fit_width=$(($window_fit_width - $(($zoom_x_delta * 4))))
-                window_fit_height=$(($window_fit_height - $(($zoom_y_delta * 4))))
-            elif [ $window_width -le  $(($window_fit_width - $(($zoom_x_delta * 4)))) ]; then            
-                window_fit_width=$(($window_fit_width - $(($zoom_x_delta * 3))))
-                window_fit_height=$(($window_fit_height - $(($zoom_y_delta * 3))))
-            elif [ $window_width -le  $(($window_fit_width - $(($zoom_x_delta * 3)))) ]; then            
-                window_fit_width=$(($window_fit_width - $(($zoom_x_delta * 2))))
-                window_fit_height=$(($window_fit_height - $(($zoom_y_delta * 2))))
-            elif [ $window_width -le  $(($window_fit_width - $(($zoom_x_delta * 2)))) ]; then            
-                window_fit_width=$(($window_fit_width - $(($zoom_x_delta))))
-                window_fit_height=$(($window_fit_height - $(($zoom_y_delta))))
-            elif [ $window_width -le  $(($window_fit_width - $zoom_x_delta)) ]; then            
-                window_fit_width=$(($window_fit_width))
-                window_fit_height=$(($window_fit_height))
+        if  [ $7 -eq 1 ]; then
+            if [ $window_width -lt  $(($window_fit_width - $zoom_x_delta)) ]; then            
+                window_new_width=$(($window_width + $zoom_x_delta))
             else
-                window_fit_width=$(($window_fit_width))
-                window_fit_height=$(($window_fit_height))
+                window_new_width=$(($window_fit_width))
             fi
-            window_x_new_pos=$(($(($display_width - $window_fit_width)) / 2))
-            window_y_new_pos=$(($(($(($display_height - $window_fit_height + $header_height - $footer_height)) / 2))))
+            if [ $window_height -lt  $(($window_fit_height - $zoom_y_delta)) ]; then            
+                window_new_height=$(($window_height + $zoom_y_delta))
+            else
+                window_new_height=$(($window_fit_height))
+            fi
+            if [ $(($window_new_width + $window_x_pos - $2)) -lt $window_fit_width ]; then
+                window_x_new_pos=$window_x_pos
+            else
+                window_x_new_pos=$(($window_fit_width - $window_new_width + $2))
+            fi
+            if [ $(($window_new_height + $window_y_pos - $1 - $3)) -ge $window_fit_height ]; then
+                window_y_new_pos=$(($1 + $3 - $4))
+            else
+                window_y_new_pos=$(($window_y_pos))
+            fi
             xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
-            xdotool windowsize --sync $active_window_id $window_fit_width $window_fit_height
-            
+            xdotool windowsize --sync $active_window_id $window_new_width $window_new_height
         else
-            if [ $window_width -ge  $(($window_fit_width))  ]; then
-                 window_fit_width=$(($window_fit_width - $zoom_x_delta))
-                window_fit_height=$(($window_fit_height - $zoom_y_delta))
-            elif [ $window_width -ge  $(($window_fit_width - $zoom_x_delta)) ]; then
-                 window_fit_width=$(($window_fit_width - $(($zoom_x_delta * 2))))
-                window_fit_height=$(($window_fit_height - $(($zoom_y_delta * 2))))
-            elif [ $window_width -ge  $(($window_fit_width - $(($zoom_x_delta * 2)))) ]; then 
-                window_fit_width=$(($window_fit_width - $(($zoom_x_delta * 3))))
-                window_fit_height=$(($window_fit_height - $(($zoom_y_delta * 3))))
-            elif [ $window_width -ge  $(($window_fit_width - $(($zoom_x_delta * 3)))) ]; then
-                window_fit_width=$(($window_fit_width - $(($zoom_x_delta * 4))))
-                window_fit_height=$(($window_fit_height - $(($zoom_y_delta * 4))))
-            elif [ $window_width -ge  $(($window_fit_width - $(($zoom_x_delta * 4)))) ]; then
-                window_fit_width=$(($window_fit_width - $(($zoom_x_delta * 5))))
-                window_fit_height=$(($window_fit_height - $(($zoom_y_delta * 5))))
+            if [ $window_width -ge $(($window_min_width + $zoom_x_delta)) ]; then
+                window_new_width=$(($window_width - $zoom_x_delta))
             else
-                window_fit_width=$(($window_fit_width - $(($zoom_x_delta * 5))))
-                window_fit_height=$(($window_fit_height - $(($zoom_y_delta * 5))))
+                window_new_width=$(($window_min_width))
             fi
-            window_x_new_pos=$(($(($display_width - $window_fit_width)) / 2))
-            window_y_new_pos=$(($(($(($display_height - $window_fit_height + $header_height - $footer_height)) / 2))))
-            xdotool windowsize --sync $active_window_id $window_fit_width $window_fit_height
+            if [ $window_height -ge $(($window_min_height + $zoom_y_delta)) ]; then
+                window_new_height=$(($window_height - $zoom_y_delta))
+            else
+                window_new_height=$(($window_min_height))
+            fi
+            if [ $window_width -ge $window_fit_width ]; then
+                window_x_new_pos=$(($margin_delta + $2))
+            else
+                window_x_new_pos=$window_x_pos
+            fi
+            if [ $(($window_height + $top_offset)) -ge $window_fit_height ]; then
+                window_y_new_pos=$(($margin_delta + $1 + $3 - $4))
+            else
+                window_y_new_pos=$(($window_y_pos - $4))
+            fi
+            xdotool windowsize --sync $active_window_id $window_new_width $window_new_height
             xdotool windowmove $active_window_id $window_x_new_pos $window_y_new_pos
-            if [ $pointer_x -ge $(($window_x_new_pos + $window_fit_width - $(($zoom_x_delta / 4)))) ]; then
-                pointer_x=$(($window_x_new_pos + $window_fit_width - $(($zoom_x_delta / 4))))
-            elif [ $pointer_x -le $(($window_x_new_pos + $(($zoom_x_delta / 4)))) ]; then
-                pointer_x=$(($window_x_new_pos + $(($zoom_x_delta / 4))))
-            elif [ $pointer_y -ge $(($window_y_new_pos + $window_fit_height - $zoom_y_delta))  ]; then
-                pointer_y=$(($window_y_new_pos + $window_fit_height - $(($zoom_y_delta / 2))))
-            elif [ $pointer_y -le $(($window_y_new_pos + $zoom_y_delta)) ]; then
-                pointer_y=$(($window_y_new_pos + $(($zoom_y_delta / 2))))
-            fi
-            xdotool mousemove $pointer_x $pointer_y
         fi
+        if [ $pointer_x -ge $(($window_x_new_pos + $window_new_width - $(($zoom_x_delta / 4)))) ]; then
+            pointer_x=$(($window_x_new_pos + $window_new_width - $(($zoom_x_delta / 4))))
+        elif [ $pointer_x -le $(($window_x_new_pos + $(($zoom_x_delta / 4)))) ]; then
+            pointer_x=$(($window_x_new_pos + $(($zoom_x_delta / 4))))
+        elif [ $pointer_y -ge $(($window_y_new_pos + $window_new_height - $zoom_y_delta))  ]; then
+            pointer_y=$(($window_y_new_pos + $window_new_height - $(($zoom_y_delta / 2))))
+        elif [ $pointer_y -le $(($window_y_new_pos + $zoom_y_delta)) ]; then
+            pointer_y=$(($window_y_new_pos + $(($zoom_y_delta / 2))))
+        fi
+        xdotool mousemove $pointer_x $pointer_y
     fi
 
 }
@@ -320,10 +318,10 @@ function windowzoom () {
         windowmove $top_margin $side_margin $bottom_margin $footer_height $gtk_fix 0 0 0 2
     ;;
     zoomP )
-        windowzoom $top_margin $side_margin $gtk_fix $width_delta $height_delta 1
+        windowzoom $top_margin $side_margin $header_height $gtk_fix $width_delta $height_delta 1
     ;;
     zoomM )
-        windowzoom $top_margin $side_margin $gtk_fix $width_delta $height_delta 0
+        windowzoom $top_margin $side_margin $header_height $gtk_fix $width_delta $height_delta 0
     ;;
     widthM )
         windowwidth $side_margin $window_x_pos $window_y_pos $width_steps $footer_height 0
