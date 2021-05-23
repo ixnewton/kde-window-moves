@@ -20,7 +20,6 @@
     margin_delta=21       # Step delta for left/right and top margin
     width_steps=42         # Step divider to width of screen width
     height_steps=32        # Step divider to height of screen height
-    width_delta=120        # X delta zoom step
     height_delta=42         # Y delta zoom step
 
 # Alternative set of margin and border sizes without gtk3-nocsd installed
@@ -170,20 +169,20 @@ function windowwidth () {
 }
 
 # Function windowzoom provides a zoom function centered and proportional to the screen size
-# parameters: $1 <top margin>, $2 <side margin>, $3 <window header>, $4 <GTK header fix> ,  $5 <horizontal step delta>, $6 <vertical step delta>, $7 <direction 1=increase> 
+# parameters: $1 <top margin>, $2 <side margin>, $3 <window header>, $4 <GTK header fix> ,  $5 <vertical step delta>, $6 <direction 1=increase> 
 function windowzoom () {
 
     window_fit_height=$(($display_height - $1 - $1 - $3))
     window_fit_width=$(($display_width - $2 - $2))
     window_min_width=800
     window_min_height=600
-    zoom_y_delta=$6
-    zoom_x_delta=$5
+    zoom_y_delta=$5
+    zoom_x_delta=$(($(($window_width * $5)) / $window_height))
     top_margin=$(($1 + $3)) 
     top_offset=$(($top_margin - $4))
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
-        if  [ $7 -eq 1 ]; then
+        if  [ $6 -eq 1 ]; then
             if [ $window_width -lt  $(($window_fit_width - $zoom_x_delta)) ]; then            
                 window_new_width=$(($window_width + $zoom_x_delta))
             else
@@ -318,10 +317,10 @@ function windowzoom () {
         windowmove $top_margin $side_margin $bottom_margin $footer_height $gtk_fix 0 0 0 2
     ;;
     zoomP )
-        windowzoom $top_margin $side_margin $header_height $gtk_fix $width_delta $height_delta 1
+        windowzoom $top_margin $side_margin $header_height $gtk_fix $height_delta 1
     ;;
     zoomM )
-        windowzoom $top_margin $side_margin $header_height $gtk_fix $width_delta $height_delta 0
+        windowzoom $top_margin $side_margin $header_height $gtk_fix $height_delta 0
     ;;
     widthM )
         windowwidth $side_margin $window_x_pos $window_y_pos $width_steps $footer_height 0
