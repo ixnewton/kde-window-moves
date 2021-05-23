@@ -199,9 +199,9 @@ function windowzoom () {
                 window_x_new_pos=$(($window_fit_width - $window_new_width + $2))
             fi
             if [ $(($window_new_height + $window_y_pos - $1 - $3)) -ge $window_fit_height ]; then
-                window_y_new_pos=$(($1 + $3 - $4))
+                window_y_new_pos=$top_offset
             else
-                window_y_new_pos=$(($window_y_pos))
+                window_y_new_pos=$(($window_y_pos - $4))
             fi
             xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
             xdotool windowsize --sync $active_window_id $window_new_width $window_new_height
@@ -222,7 +222,7 @@ function windowzoom () {
                 window_x_new_pos=$window_x_pos
             fi
             if [ $(($window_height + $top_offset)) -ge $window_fit_height ]; then
-                window_y_new_pos=$(($margin_delta + $1 + $3 - $4))
+                window_y_new_pos=$(($margin_delta + $top_offset))
             else
                 window_y_new_pos=$(($window_y_pos - $4))
             fi
