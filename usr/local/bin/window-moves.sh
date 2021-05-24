@@ -1,12 +1,6 @@
 #!/bin/bash
 # Get the current window and desktop data
     active_window_id=$(xdotool getactivewindow)
-    #88080591 #Chrome window
-    #88080434 #Chrome
-    #121634839 #Kate
-    #106954755 #Firefox
-    #73400369 #Thunderbird
-    #$(xdotool getactivewindow)
     window_name=$(xdotool getwindowname $active_window_id)
     display_width=$(xdotool getdisplaygeometry | awk -F "[[:space:]]+" '/ /{print $1}')
     display_height=$(xdotool getdisplaygeometry | awk -F "[[:space:]]+" '/ /{print $2}')
