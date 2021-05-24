@@ -37,26 +37,26 @@
 # Detect QT windows which do not need any position fiddles to compensate for windowmove positioning by frame coords for GTK built apps
 # With QT windows we add header_height and for GTK both gtk_fix for header and footer_height to compensate for a dummy footer border! 
 
-    if [  "$(echo $window_name | grep -c  "Chrome\|Mozilla")" -gt 0  ] ; then
+    if [  "$(echo $window_name | grep -c  "Chrome\|Mozilla\|Signal")" -gt 0  ] ; then
         gtk_fix=$border_gtk
         footer_height=$border_y
         header_height=$border_y
-        app_type="GTK-app Chrome/Thunderbird/Firefox"
-    elif [ "$(echo $window_name | grep -c  "Scanner\|Twitter\|Maps\|iPlayer\|Calendar\|Photos\|Podcasts\|WhatsApp")" -gt 0  ] ; then
-        gtk_fix=0
-        footer_height=0
-        header_height=0
-        app_type="GTK-app window"
-    elif [ "$(echo $window_name | grep -c  "—\|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice\|Telegram\|Krusader") " -gt 0 ] ; then
+        app_type="GTK-app Chrome/Thunderbird/Firefox/Signal"
+    elif [ "$(echo $window_name | grep -c  "—\|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice\|Telegram\|Krusader\|LibreOffice") " -gt 0 ] ; then
         gtk_fix=0
         footer_height=0
         header_height=$border_y
         app_type="QT-app"
+    elif [ "$(echo $window_name | grep -c  "Scanner\|Twitter\|Maps\|iPlayer\|Calendar\|Photos\|Podcasts\|WhatsApp\|Office\|Word\|Excel\|OneDrive")" -gt 0  ] ; then
+        gtk_fix=0
+        footer_height=0
+        header_height=0
+        app_type="GTK-app windowed"
     else
         gtk_fix=$border_gtk
         footer_height=$border_y
-        header_height=0
-        app_type="GTK-apps"
+        header_height=$border_y
+        app_type="GTK-apps other"
     fi
 
 # Function windowheight provides window height adjustment from the bottom in steps by pixel amaount 
