@@ -86,7 +86,7 @@ function windowheight () {
             fi
     fi
 
-}
+ }
 
 # Function windowtop provides a top margin expand/contract function in steps by pixel amaount
 # parameters: $1 <top margin>, $2 <side margin>, $3 <window header>,  $4 <GTK header fix>, $5 <step in pixels>, $6 <direction 1=increase> 
@@ -122,7 +122,7 @@ function windowtop () {
         xdotool mousemove $pointer_x $(($pointer_y + $window_y_new_pos - $window_y_pos + $4))
     fi
 
-}
+ }
 
 # Function windowwidth provides a width expand/contract function in steps proportional to screen width
 # parameters: $1 <side margin>, $2 <window_x_pos>, $3 <window_y_pos>, $4 <header height>, $5 <gtk_fix>, $6 <width step delta>, $7 <footer height>, $8 <direction 1=increase> 
@@ -169,7 +169,7 @@ function windowwidth () {
             fi        
     fi
 
-}
+ }
 
 # Function windowzoom provides a zoom function centered and proportional to the screen size
 # parameters: $1 <top margin>, $2 <side margin>, $3 <window header>, $4 <GTK header fix> ,  $5 <vertical step delta>, $6 <margin delta>, $7 <direction 1=increase> 
@@ -180,7 +180,11 @@ function windowzoom () {
     window_min_width=800
     window_min_height=450
     zoom_y_delta=$5
-    zoom_x_delta=$(($(($window_width * $5)) / $window_height))
+    if [ $window_width -ge $window_fit_width ]; then
+       zoom_x_delta=$(($6 * 2))
+    else
+        zoom_x_delta=$(($(($window_width * $5)) / $window_height))
+    fi
     top_margin=$(($1 + $3)) 
     top_offset=$(($top_margin - $4))
 
@@ -244,7 +248,7 @@ function windowzoom () {
         xdotool mousemove $pointer_x $pointer_y
     fi
 
-}
+ }
 
 # Function windowmove moves the window left/right/centre with step adjustments for left/right by step pixel steps
 # parameters: $1 <top margin>, $2 <side margin>, $3 <bottom margin>, $4 <header height>, $5 <GTK fix>, $6 <horizontal step 1>, $7 <step 2>, $8 <step 3>, 
@@ -289,7 +293,6 @@ function windowmove () {
         fi
             xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
             xdotool mousemove $(($pointer_x + $window_x_new_pos - $window_x_pos)) $pointer_y
-#         fi
     fi
 
  }
@@ -305,8 +308,8 @@ function windowmove () {
             xdotool windowminimize $window_id
         fi
     done
- 
  }
+ 
 # echo "app_type - "$app_type
  # Selector for functions with parameter sets. These can be adjusted to suit personal perferences.
  case $1 in
