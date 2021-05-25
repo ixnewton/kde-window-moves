@@ -42,7 +42,7 @@
         footer_height=$border_y
         header_height=$border_y
         app_type="GTK-app Chrome/Thunderbird/Firefox/Signal"
-    elif [ "$(echo $window_name | grep -c  "—\|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice\|Telegram\|Krusader\|LibreOffice") " -gt 0 ] ; then
+    elif [ "$(echo $window_name | grep -c  "—\|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice\|Telegram\|Krusader\|LibreOffice\|Back\ In\ Time") " -gt 0 ] ; then
         gtk_fix=0
         footer_height=0
         header_height=$border_y
