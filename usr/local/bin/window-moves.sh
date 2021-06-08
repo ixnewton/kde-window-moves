@@ -21,7 +21,7 @@
     width_steps=42         # Step divider to width of screen width
     height_steps=32        # Step divider to height of screen height
     height_delta=42         # Y delta zoom step
-
+    
 # Alternative set of margin and border sizes without gtk3-nocsd installed
 #     top_margin=4            # provodes a comfortable close fit to top of screen
 #     side_margin=4           # provides a comfortable close fit to sides. 
@@ -47,7 +47,7 @@
         footer_height=0
         header_height=$border_y
         app_type="QT-app"
-    elif [ "$(echo $window_name | grep -c  "Scanner\|Twitter\|Maps\|iPlayer\|Calendar\|Photos\|Podcasts\|WhatsApp\|Office\|Word\|Excel\|OneDrive")" -gt 0  ] ; then
+    elif [ "$(echo $window_name | grep -c  "Scanner\|Twitter\|Maps\|iPlayer\|Calendar\|Photos\|Podcasts\|WhatsApp\|Office\|Word\|Excel\|OneDrive\|Fip")" -gt 0  ] ; then
         gtk_fix=0
         footer_height=0
         header_height=0
@@ -142,21 +142,22 @@ function windowwidth () {
                         window_x_new_pos=$1
                     elif [ $window_x_pos -lt $(($window_delta / 2)) ]; then
                         window_x_new_pos=$1
-                    elif [ $(($window_new_width + $window_x_pos)) -gt $window_fit_width ]; then
+                    elif [ $(($window_new_width + $window_x_new_pos)) -gt $window_fit_width ]; then
                         window_x_new_pos=$(($display_width - $window_new_width - $1))
                     fi
                     xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
                     xdotool windowsize --sync $active_window_id $window_new_width $window_height
             else
                     window_new_width=$(($window_width - $window_delta))
-                    window_x_new_pos=$(($window_x_pos + $(($window_delta / 2))))                    
-                    
-                    if [ $(($display_width - $window_width - $window_x_pos)) -le $(($window_delta / 2)) ]; then
-                        window_x_new_pos=$(($display_width - $window_new_width - $1))
+                    if [ $window_width -ge $window_fit_width ]; then
+                        window_x_new_pos=$(($window_x_pos + $(($window_delta / 2))))
+                    elif [ $(($window_x_pos + $window_width - $1)) -ge $window_fit_width ]; then
+                        window_x_new_pos=$(($window_fit_width - $window_new_width + $1))
                     elif [ $window_x_pos -lt $(($window_delta / 2))  ]; then
                         window_x_new_pos=$1
+                    else
+                        window_x_new_pos=$(($window_x_pos + $(($window_delta / 2))))
                     fi
-
                     xdotool windowsize --sync $active_window_id $window_new_width $window_height
                     if [ $(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:]x]+" '/Geometry:/{print $3}') -ne  $window_width ]; then
                         xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
@@ -180,8 +181,10 @@ function windowzoom () {
     window_min_width=800
     window_min_height=450
     zoom_y_delta=$5
-    if [ $window_width -ge $window_fit_width ]; then
-       zoom_x_delta=$(($6 * 2))
+    if [ $window_width -ge $window_fit_width ] && [ $7 -eq 0 ]; then
+        xdotool windowstate --remove MAXIMIZED_VERT $active_window_id  # Fixes maxed window V
+        xdotool windowstate --remove MAXIMIZED_HORZ $active_window_id  # Fixes maxed window H
+        zoom_x_delta=$(($6 * 2))
     else
         zoom_x_delta=$(($(($window_width * $5)) / $window_height))
     fi
