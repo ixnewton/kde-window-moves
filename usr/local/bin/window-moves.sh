@@ -260,9 +260,9 @@ function windowmove () {
  
     window_y_new_pos=$(($window_y_pos - $5))
     window_fit_height=$(($display_height - $1 - $3))
+    window_fit_width=$(($display_width - $2 - $2))
 
-    if [ "$window_name" != "Desktop — Plasma" ];
-        then
+    if [ "$window_name" != "Desktop — Plasma" ]; then
         if [ $window_height -gt $window_fit_height ]; then
             window_new_height=$window_fit_height
             xdotool windowsize --sync $active_window_id $window_width $window_new_height
@@ -294,8 +294,14 @@ function windowmove () {
         elif [ $9 -eq 2 ]; then
             window_x_new_pos=$((($display_width - $window_width) /2 ))
         fi
-            xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
-            xdotool mousemove $(($pointer_x + $window_x_new_pos - $window_x_pos)) $pointer_y
+        if [ $(($window_x_new_pos + $window_width)) -ge $window_fit_width ]; then
+            window_x_new_pos=$(($window_fit_width - $window_width + $2))  
+        fi
+        if [ $window_x_new_pos -lt $2 ]; then
+            window_x_new_pos=$2
+        fi
+        xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
+        xdotool mousemove $(($pointer_x + $window_x_new_pos - $window_x_pos)) $pointer_y
     fi
 
  }
