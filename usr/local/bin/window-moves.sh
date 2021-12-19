@@ -12,51 +12,49 @@
     pointer_y=$(xdotool getmouselocation | awk -F "[[:space:]]" '//{print $2}' | awk -F "[:]" '//{print $2}')
 
 # Current set of margin and border sizes with gtk3-nocsd installed:
-    top_margin=4            # provodes a comfortable close fit to top of screen
-    side_margin=4           # provides a comfortable close fit to sides. 
-    bottom_margin=4     # provides a comfortable close fit to bottom of screen. Increase by frame size 0 -10 (px) if frame borders are enabled
-    border_y=29               # The size of the window top frame added to window when positioning (QT)  and virtual bottom (GTK)
-    border_gtk=29           # The virtual offset size of window top frame for non QT windows ($gtk_fix)
-    margin_delta=21       # Step delta for left/right and top margin
-    width_steps=42         # Step divider to width of screen width
-    height_steps=32        # Step divider to height of screen height
-    height_delta=42         # Y delta zoom step
-    
-# Alternative set of margin and border sizes without gtk3-nocsd installed
-#     top_margin=4            # provodes a comfortable close fit to top of screen
-#     side_margin=4           # provides a comfortable close fit to sides. 
-#     bottom_margin=4     # provides a comfortable close fit to bottom of screen. Increase by frame size 0 -10 (px) if frame borders are enabled
-#     border_y=23               # The size of the window top frame added to window when positioning (QT)  and virtual bottom (GTK)
-#     border_gtk=20           # The virtual offset size of window top frame for non QT windows ($gtk_fix)
-#     margin_delta=21       # Step delta for left/right and top margin
-#     width_steps=42         # Step divider to width of screen width
-#     height_steps=32        # Step divider to height of screen height
-#     width_delta=120        # X delta zoom step
-#     height_delta=42         # Y delta zoom step    
-    
+    top_margin=3        # provodes a comfortable close fit to top of screen
+    side_margin=3       # provides a comfortable close fit to sides.
+    bottom_margin=3     # provides a comfortable close fit to bottom of screen. Increase by frame size 0 -10 (px) if frame borders are enabled
+    border_y=29         # The size of the window top frame added to window when positioning (QT)  and virtual bottom (GTK)
+    border_gtk=12       # The virtual offset size of window top frame for non QT windows ($gtk_fix)
+    margin_delta=21     # Step delta for left/right and top margin
+    width_steps=42      # Step divider to width of screen width
+    height_steps=32     # Step divider to height of screen height
+    height_delta=42     # Y delta zoom step
+
+# Support for 2 screens extending display to 2nd screen to right with the same resolution (2 x 1920x1080)
+    side_offset=0       # Offset for second screen window_x_pos calculations.
+    if [ $window_x_pos -gt $(($display_width - $border_gtk - $side_margin)) ] ; then
+        side_offset=$display_width
+        window_x_pos=$(($window_x_pos - $display_width - $border_gtk))
+    fi
+#echo "window_x_pos - "$window_x_pos" side_offset - "$side_offset
+
 # Detect QT windows which do not need any position fiddles to compensate for windowmove positioning by frame coords for GTK built apps
 # With QT windows we add header_height and for GTK both gtk_fix for header and footer_height to compensate for a dummy footer border! 
 
-    if [  "$(echo $window_name | grep -c  "Chrome\|Mozilla\|Signal")" -gt 0  ] ; then
-        gtk_fix=$border_gtk
+    if [  "$(echo $window_name | grep -c  "Mozilla\|Signal\|PulseEffects\|Pulse\|FileZilla")" -gt 0  ] ; then
+        top_margin=11
+        gtk_fix=29
         footer_height=$border_y
-        header_height=$border_y
-        app_type="GTK-app Chrome/Thunderbird/Firefox/Signal"
-    elif [ "$(echo $window_name | grep -c  "—\|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice\|Telegram\|Krusader\|LibreOffice\|Back\ In\ Time") " -gt 0 ] ; then
+        header_height=0
+        app_type="GTK-app Thunderbird/Firefox/Signal"
+    elif [ "$(echo $window_name | grep -c  "—\|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice\|Telegram\|Krusader\|LibreOffice\|Back\ In\ Time\|Kaffeine\|KDiff3\|Volume") " -gt 0 ] ; then
         gtk_fix=0
         footer_height=0
         header_height=$border_y
         app_type="QT-app"
-    elif [ "$(echo $window_name | grep -c  "Scanner\|Twitter\|Maps\|iPlayer\|Calendar\|Photos\|Podcasts\|WhatsApp\|Office\|Word\|Excel\|OneDrive\|Fip")" -gt 0  ] ; then
-        gtk_fix=0
-        footer_height=0
-        header_height=0
-        app_type="GTK-app windowed"
+#     elif [ "$(echo $window_name | grep -c  "pgAdmin\|Twitter\|WhatsApp\|Maps\|iPlayer\|Calendar\|Photos\|Podcasts\|Office\|Word\|Excel\|OneDrive\|Fip\|Meet\|Zoom\|Deezer\|Arte\|Amazon\|Roundcube\|Google Drive\|Chrome")" -gt 0  ] ; then
+#         gtk_fix=0
+#         footer_height=-32
+#         header_height=-10
+#         side_margin=-14
+#         app_type="GTK-app Chrome Headless"
     else
-        gtk_fix=$border_gtk
+        gtk_fix=29
         footer_height=$border_y
         header_height=$border_y
-        app_type="GTK-apps other"
+        app_type="Non-GTK-apps other"
     fi
 
 # Function windowheight provides window height adjustment from the bottom in steps by pixel amaount 
@@ -82,7 +80,7 @@ function windowheight () {
             xdotool windowsize --sync $active_window_id $window_width $window_new_height
             xdotool windowmove --sync $active_window_id 'x' $window_y_pos
             if [ $(($pointer_y + $window_delta)) -ge $(($window_new_height + $window_y_pos)) ]; then
-                xdotool mousemove $pointer_x $(($window_new_height + $window_y_pos - $window_delta))
+                xdotool mousemove $pointer_x $(($window_new_height + $window_y_pos))
             fi
     fi
 
@@ -94,12 +92,11 @@ function windowtop () {
 
     y_multiplier=$(($(($window_y_pos - $1 - $3)) / $5 ))
     window_fit_pos=$(( $display_height - $1 - $2 ))
-    top_margin=$(($1 + $3)) 
-    top_offset=$(($top_margin - $4))
+    top_margin=$(($1 + $3 - $4))
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
         if  [ $6 -eq 1 ]; then
-            window_y_new_pos=$(( $(($(($y_multiplier + 1)) * $5)) + $top_offset)) 
+            window_y_new_pos=$(( $(($(($y_multiplier + 1)) * $5)) + $top_margin))
             window_base_pos=$(( $window_height + $window_y_pos))
             window_fit_height=$(($display_height - $window_y_new_pos - $2 - $footer_height))
             if [ $window_height -gt $window_fit_height ] || [ $window_base_pos -gt $window_fit_pos ] ; then
@@ -107,9 +104,9 @@ function windowtop () {
             fi
         else
              if [ $y_multiplier -eq 0 ]; then
-                    window_y_new_pos=$top_offset
+                    window_y_new_pos=$top_margin
             else
-                    window_y_new_pos=$(( $(($(($y_multiplier - 1)) * $5)) + $top_offset))
+                    window_y_new_pos=$(( $(($(($y_multiplier - 1)) * $5)) + $top_margin))
             fi
             window_base_pos=$(( $window_height + $window_y_pos))
             window_fit_height=$(($display_height - $window_y_new_pos - $2 - $footer_height))
@@ -119,7 +116,7 @@ function windowtop () {
         fi
         xdotool windowsize --sync $active_window_id $window_width $window_height
         xdotool windowmove --sync $active_window_id 'x' $window_y_new_pos
-        xdotool mousemove $pointer_x $(($pointer_y + $window_y_new_pos - $window_y_pos + $4))
+        xdotool mousemove $pointer_x $(($pointer_y + $window_y_new_pos - $window_y_pos + $gtk_fix))
     fi
 
  }
@@ -130,7 +127,7 @@ function windowwidth () {
 
     window_fit_width=$(($display_width - $((2 * $1))))
     window_delta=$(($window_fit_width / $6))
-    window_y_new_pos=$(($3 - $5))
+    window_y_new_pos=$($3 - $4)
     window_x_pos=$2
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
@@ -145,6 +142,8 @@ function windowwidth () {
                     elif [ $(($window_new_width + $window_x_new_pos)) -gt $window_fit_width ]; then
                         window_x_new_pos=$(($display_width - $window_new_width - $1))
                     fi
+                    window_x_new_pos=$(($window_x_new_pos + $side_offset))
+#                    echo "window_x_new_pos P - "$window_x_new_pos
                     xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
                     xdotool windowsize --sync $active_window_id $window_new_width $window_height
             else
@@ -153,13 +152,15 @@ function windowwidth () {
                         window_x_new_pos=$(($window_x_pos + $(($window_delta / 2))))
                     elif [ $(($window_x_pos + $window_width - $1)) -ge $window_fit_width ]; then
                         window_x_new_pos=$(($window_fit_width - $window_new_width + $1))
-                    elif [ $window_x_pos -lt $(($window_delta / 2))  ]; then
+                    elif [ $(($window_x_pos)) -lt $(($window_delta / 2))  ]; then
                         window_x_new_pos=$1
                     else
                         window_x_new_pos=$(($window_x_pos + $(($window_delta / 2))))
                     fi
                     xdotool windowsize --sync $active_window_id $window_new_width $window_height
                     if [ $(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:]x]+" '/Geometry:/{print $3}') -ne  $window_width ]; then
+                        window_x_new_pos=$(($window_x_new_pos + $side_offset))
+                        echo "window_x_new_pos M - "$window_x_new_pos
                         xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
                     fi
                     if [ $pointer_x -ge $(($window_x_new_pos + $window_new_width - $window_delta))  ]; then
@@ -188,8 +189,7 @@ function windowzoom () {
     else
         zoom_x_delta=$(($(($window_width * $5)) / $window_height))
     fi
-    top_margin=$(($1 + $3)) 
-    top_offset=$(($top_margin - $4))
+    top_margin=$(($1 + $3 - $4))
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
         if  [ $7 -eq 1 ]; then
@@ -208,11 +208,12 @@ function windowzoom () {
             else
                 window_x_new_pos=$(($window_fit_width - $window_new_width + $2))
             fi
-            if [ $(($window_new_height + $window_y_pos - $1 - $3)) -ge $window_fit_height ]; then
-                window_y_new_pos=$top_offset
+            if [ $(($window_new_height + $window_y_pos - $1)) -ge $window_fit_height ]; then
+                window_y_new_pos=$top_margin
             else
-                window_y_new_pos=$(($window_y_pos - $4))
+                window_y_new_pos=$(($window_y_pos))
             fi
+            window_x_new_pos=$(($window_x_new_pos + $side_offset))
             xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
             xdotool windowsize --sync $active_window_id $window_new_width $window_new_height
         else
@@ -231,11 +232,12 @@ function windowzoom () {
             else
                 window_x_new_pos=$window_x_pos
             fi
-            if [ $(($window_height + $top_offset)) -ge $window_fit_height ]; then
-                window_y_new_pos=$(($6 + $top_offset))
+            if [ $(($window_height + $top_margin)) -ge $window_fit_height ]; then
+                window_y_new_pos=$(($6 + $top_margin))
             else
-                window_y_new_pos=$(($window_y_pos - $4))
+                window_y_new_pos=$(($window_y_pos))
             fi
+            window_x_new_pos=$(($window_x_new_pos + $side_offset))
             xdotool windowsize --sync $active_window_id $window_new_width $window_new_height
             xdotool windowmove $active_window_id $window_x_new_pos $window_y_new_pos
         fi
@@ -260,7 +262,7 @@ function windowmove () {
  
     window_y_new_pos=$(($window_y_pos - $5))
     window_fit_height=$(($display_height - $1 - $3))
-    window_fit_width=$(($display_width - $2 - $2))
+    window_fit_width=$(($display_width - $2 - $2 + $5 +$5))
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
         if [ $window_height -gt $window_fit_height ]; then
@@ -300,6 +302,7 @@ function windowmove () {
         if [ $window_x_new_pos -lt $2 ]; then
             window_x_new_pos=$2
         fi
+        window_x_new_pos=$(($window_x_new_pos + $side_offset))
         xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
         xdotool mousemove $(($pointer_x + $window_x_new_pos - $window_x_pos)) $pointer_y
     fi
@@ -323,25 +326,25 @@ function windowmove () {
  # Selector for functions with parameter sets. These can be adjusted to suit personal perferences.
  case $1 in
     moveL )
-        windowmove $top_margin $side_margin $bottom_margin $header_height $gtk_fix $margin_delta $(($margin_delta * 2)) $(($margin_delta * 3)) 0
+        windowmove $top_margin $side_margin $bottom_margin $header_height $gtk_fix $margin_delta $(($margin_delta * 2)) $(($margin_delta * 3)) 0 $side_offset
     ;;
     moveR )
-        windowmove $top_margin $side_margin $bottom_margin $header_height $gtk_fix $margin_delta $(($margin_delta * 2)) $(($margin_delta * 3)) 1
+        windowmove $top_margin $side_margin $bottom_margin $header_height $gtk_fix $margin_delta $(($margin_delta * 2)) $(($margin_delta * 3)) 1 $side_offset
     ;;
     moveC )
-        windowmove $top_margin $side_margin $bottom_margin $footer_height $gtk_fix 0 0 0 2
+        windowmove $top_margin $side_margin $bottom_margin $footer_height $gtk_fix 0 0 0 2 $side_offset
     ;;
     zoomP )
-        windowzoom $top_margin $side_margin $header_height $gtk_fix $height_delta $margin_delta 1
+        windowzoom $top_margin $side_margin $header_height $gtk_fix $height_delta $margin_delta 1 $side_offset
     ;;
     zoomM )
-        windowzoom $top_margin $side_margin $header_height $gtk_fix $height_delta $margin_delta 0
+        windowzoom $top_margin $side_margin $header_height $gtk_fix $height_delta $margin_delta 0 $side_offset
     ;;
     widthM )
-        windowwidth $side_margin $window_x_pos $window_y_pos $header_height $gtk_fix $width_steps $footer_height 0
+        windowwidth $side_margin $window_x_pos $window_y_pos $header_height $gtk_fix $width_steps $footer_height 0 $side_offset
     ;;  
     widthP )
-        windowwidth $side_margin $window_x_pos $window_y_pos  $header_height $gtk_fix $width_steps $footer_height 1
+        windowwidth $side_margin $window_x_pos $window_y_pos  $header_height $gtk_fix $width_steps $footer_height 1 $side_offset
     ;;  
     heightM )
         windowheight $top_margin $bottom_margin $height_steps $gtk_fix 1
@@ -361,4 +364,4 @@ function windowmove () {
     *)
     echo "Command not recognized! - Usage window-move.sh <command> <int. offset> . Commands moveL, moveR, moveC, zoomM, zoomP, widthM, widthP, heightM, heightP or winTop with integer offfset!"
     ;;
-esac
+ esac
