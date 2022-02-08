@@ -17,7 +17,7 @@
     bottom_margin=3     # provides a comfortable close fit to bottom of screen. Increase by frame size 0 -10 (px) if frame borders are enabled
     border_y=29         # The size of the window top frame added to window when positioning (QT)  and virtual bottom (GTK)
     border_gtk=12       # The virtual offset size of window top frame for non QT windows ($gtk_fix)
-    margin_delta=21     # Step delta for left/right and top margin
+    margin_delta=22     # Step delta for left/right and top margin
     width_steps=42      # Step divider to width of screen width
     height_steps=32     # Step divider to height of screen height
     height_delta=42     # Y delta zoom step
@@ -26,35 +26,34 @@
     side_offset=0       # Offset for second screen window_x_pos calculations.
     if [ $window_x_pos -gt $(($display_width - $border_gtk - $side_margin)) ] ; then
         side_offset=$display_width
-        window_x_pos=$(($window_x_pos - $display_width - $border_gtk))
+        window_x_pos=$(($window_x_pos - $display_width))
     fi
-#echo "window_x_pos - "$window_x_pos" side_offset - "$side_offset
+#echo "window_x_pos - "$window_x_pos" side_offset - "$side_offset ----  - $border_gtk
 
 # Detect QT windows which do not need any position fiddles to compensate for windowmove positioning by frame coords for GTK built apps
 # With QT windows we add header_height and for GTK both gtk_fix for header and footer_height to compensate for a dummy footer border! 
 
-    if [  "$(echo $window_name | grep -c  "Mozilla\|Signal\|PulseEffects\|Pulse\|FileZilla")" -gt 0  ] ; then
-        top_margin=11
+    if [  "$(echo $window_name | grep -c  "Mozilla\|Signal\|Pulse\|FileZilla")" -gt 0  ] ; then
         gtk_fix=29
         footer_height=$border_y
-        header_height=0
+        header_height=$border_y
         app_type="GTK-app Thunderbird/Firefox/Signal"
-    elif [ "$(echo $window_name | grep -c  "—\|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice\|Telegram\|Krusader\|LibreOffice\|Back\ In\ Time\|Kaffeine\|KDiff3\|Volume") " -gt 0 ] ; then
+    elif [ "$(echo $window_name | grep -c  "—\|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice\|Telegram\|Krusader\|LibreOffice\|Back\ In\ Time\|Kaffeine\|KDiff3\|Volume\|KDE Menu Editor\|KDevelop") " -gt 0 ] ; then
         gtk_fix=0
         footer_height=0
         header_height=$border_y
         app_type="QT-app"
-#     elif [ "$(echo $window_name | grep -c  "pgAdmin\|Twitter\|WhatsApp\|Maps\|iPlayer\|Calendar\|Photos\|Podcasts\|Office\|Word\|Excel\|OneDrive\|Fip\|Meet\|Zoom\|Deezer\|Arte\|Amazon\|Roundcube\|Google Drive\|Chrome")" -gt 0  ] ; then
-#         gtk_fix=0
-#         footer_height=-32
-#         header_height=-10
-#         side_margin=-14
-#         app_type="GTK-app Chrome Headless"
+    elif [ "$(echo $window_name | grep -c  "Twitter\|WhatsApp\|Maps\|iPlayer\|Calendar\|Google Photos\|Podcasts\|RadioFrance\|Zoom\|Deezer\|Arte\|Roundcube\|Google Drive\|Prime Video\|All 4\|Curzon\|Netflix\|Skype\|Gmail\|Google Meet\|EasyEffects")" -gt 0  ] ; then
+        gtk_fix=0
+        footer_height=-32
+        header_height=-10
+        side_margin=-14
+        app_type="GTK-app Chrome Headless"
     else
         gtk_fix=29
         footer_height=$border_y
         header_height=$border_y
-        app_type="Non-GTK-apps other"
+        app_type="Other-GTK-apps"
     fi
 
 # Function windowheight provides window height adjustment from the bottom in steps by pixel amaount 
@@ -276,8 +275,6 @@ function windowmove () {
                 window_x_new_pos=$(($7 + $2))
             elif [ $window_x_pos -eq $(($7 + $2)) ]; then
                 window_x_new_pos=$(($8 + $2))
-           elif [ $window_x_pos -eq $(($8 + $2)) ]; then
-                window_x_new_pos=$((($display_width - $window_width) /2 ))
             else
                 window_x_new_pos=$2
             fi 
@@ -288,8 +285,6 @@ function windowmove () {
                 window_x_new_pos=$(($display_width - $window_width - $7 - $2))
             elif [ $window_x_pos -eq $(($display_width - $window_width - $7 - $2)) ]; then
                 window_x_new_pos=$(($display_width - $window_width - $8 - $2))
-            elif [ $window_x_pos -eq $(($display_width - $window_width - $8 - $2)) ]; then
-                window_x_new_pos=$((($display_width - $window_width) /2 ))
             else
                 window_x_new_pos=$(($display_width - $window_width - $2))
             fi
