@@ -15,7 +15,8 @@
     top_margin=3        # provodes a comfortable close fit to top of screen
     side_margin=3       # provides a comfortable close fit to sides.
     bottom_margin=3     # provides a comfortable close fit to bottom of screen. Increase by frame size 0 -10 (px) if frame borders are enabled
-    border_y=29         # The size of the window top frame added to window when positioning (QT)  and virtual bottom (GTK)
+    border_y=31         # The size of the window top frame added to window when positioning (QT)  and virtual bottom (GTK)
+    footer_y=31       # The size of the window top frame added to window when positioning (QT)  and virtual bottom (GTK)
     border_gtk=12       # The virtual offset size of window top frame for non QT windows ($gtk_fix)
     margin_delta=22     # Step delta for left/right and top margin
     width_steps=42      # Step divider to width of screen width
@@ -33,22 +34,34 @@
 # Detect QT windows which do not need any position fiddles to compensate for windowmove positioning by frame coords for GTK built apps
 # With QT windows we add header_height and for GTK both gtk_fix for header and footer_height to compensate for a dummy footer border! 
 
-    if [ "$(echo $window_name | grep -c  "Konsole\|Dolphin\|Kate\|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice\|Telegram\|Krusader\|LibreOffice\|Back\ In\ Time\|Kaffeine\|KDiff3\|Volume\|KDE Menu Editor\|KDevelop") " -gt 0 ] ; then
+    if [ "$(echo $window_name | grep -c  "Gwenview\|KDE Connect\|Konsole\|Dolphin\|Kate\|Octopi\|Session\|System\|HeidiSQL\|qBittorrent\|Clementine\|digiKam\|Okular\|KeePassXC\|Krusader\|LibreOffice\|Telegram\|Krusader\|Back In Time\|Kaffeine\|KDiff3\|Volume\|KDE Menu Editor\|KDevelop\|Info Center\|Virtualbox\|KWrite") " -gt 0 ] ; then
         gtk_fix=0
         footer_height=0
         header_height=$border_y
         app_type="QT-app"
-    elif [ "$(echo $window_name | grep -c  "Twitter\|WhatsApp\|Maps\|iPlayer\|Calendar\|Google Photos\|Podcasts\|RadioFrance\|Zoom\|Deezer\|Arte\|Roundcube\|Google Drive\|Prime Video\|All 4\|Curzon\|Netflix\|Skype\|Gmail\|Google Meet\|EasyEffects")" -gt 0  ] ; then
+    elif [ "$(echo $window_name | grep -c  "Twitter\|WhatsApp\|Maps\|iPlayer\|Calendar\|Google Photos\|Podcasts\|RadioFrance\|Zoom\|Deezer -\|Arte\|Roundcube\|Google Drive\|Prime Video\|All 4\|Curzon\|Netflix\|Gmail\|Google Meet\|Xe Exchange\|Byline Times")" -gt 0  ] ; then
         gtk_fix=0
         footer_height=-32
         header_height=-10
         side_margin=-14
         app_type="GTK-app Chrome Headless"
+    elif [ "$(echo $window_name | grep -c  "Touché")" -gt 0  ] ; then
+        gtk_fix=0
+        footer_height=-60
+        header_height=32
+        side_margin=-44
+        app_type="GTK-app Other Headless"
+    elif [ "$(echo $window_name | grep -c  "Easy\ Effects")" -gt 0  ] ; then
+        gtk_fix=0
+        footer_height=-65
+        header_height=-55
+        side_margin=-58
+        app_type="GTK-app Other Headless"
     else
-        gtk_fix=29
-        footer_height=$border_y
+        gtk_fix=$border_y
+        footer_height=$footer_y
         header_height=$border_y
-        app_type="GTK-apps"
+        app_type="GTK-app-other"
     fi
 
 # Function windowheight provides window height adjustment from the bottom in steps by pixel amaount 
@@ -120,8 +133,8 @@ function windowtop () {
 function windowwidth () {
 
     window_fit_width=$(($display_width - $((2 * $1))))
-    window_delta=$(($window_fit_width / $6))
-    window_y_new_pos=$($3 - $4)
+    window_delta=$(($window_fit_width/$6))
+    window_y_new_pos=$(($3 - $5))
     window_x_pos=$2
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
@@ -134,29 +147,29 @@ function windowwidth () {
                     elif [ $window_x_pos -lt $(($window_delta / 2)) ]; then
                         window_x_new_pos=$1
                     elif [ $(($window_new_width + $window_x_new_pos)) -gt $window_fit_width ]; then
-                        window_x_new_pos=$(($display_width - $window_new_width - $1))
+                        window_x_new_pos=$(($display_width - $window_new_width))
                     fi
                     window_x_new_pos=$(($window_x_new_pos + $side_offset))
-#                    echo "window_x_new_pos P - "$window_x_new_pos
+                    echo "window_x_new_pos P - "$window_x_new_pos
                     xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
                     xdotool windowsize --sync $active_window_id $window_new_width $window_height
             else
                     window_new_width=$(($window_width - $window_delta))
-                    if [ $window_width -ge $window_fit_width ]; then
+                    if [ $window_width -le $window_fit_width ]; then
                         window_x_new_pos=$(($window_x_pos + $(($window_delta / 2))))
                     elif [ $(($window_x_pos + $window_width - $1)) -ge $window_fit_width ]; then
-                        window_x_new_pos=$(($window_fit_width - $window_new_width + $1))
-                    elif [ $(($window_x_pos)) -lt $(($window_delta / 2))  ]; then
+                         window_x_new_pos=$(($window_fit_width - $window_new_width + $1))
+                    elif [ $(($window_x_pos)) -lt $(($window_delta / 2)) ]; then
                         window_x_new_pos=$1
                     else
                         window_x_new_pos=$(($window_x_pos + $(($window_delta / 2))))
                     fi
                     xdotool windowsize --sync $active_window_id $window_new_width $window_height
-                    if [ $(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:]x]+" '/Geometry:/{print $3}') -ne  $window_width ]; then
-                        window_x_new_pos=$(($window_x_new_pos + $side_offset))
-                        echo "window_x_new_pos M - "$window_x_new_pos
-                        xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
-                    fi
+#                    if [ $(xdotool getwindowgeometry $active_window_id | awk -F "[[:space:]x]+" '/Geometry:/{print $3}') -ne  $window_width ]; then
+                     window_x_new_pos=$(($window_x_new_pos + $side_offset))
+#                        echo "window_x_new_pos M - "$window_x_new_pos
+                    xdotool windowmove --sync $active_window_id $window_x_new_pos $window_y_new_pos
+#                    fi
                     if [ $pointer_x -ge $(($window_x_new_pos + $window_new_width - $window_delta))  ]; then
                         xdotool mousemove $(($window_x_new_pos + $window_new_width - $window_delta)) $pointer_y
                     elif [ $pointer_x -le $(($window_x_new_pos + $window_delta))  ]; then
@@ -224,7 +237,7 @@ function windowzoom () {
             if [ $window_width -ge $window_fit_width ]; then
                 window_x_new_pos=$(($6 + $2))
             else
-                window_x_new_pos=$window_x_pos
+                window_x_new_pos=$(($window_x_pos))
             fi
             if [ $(($window_height + $top_margin)) -ge $window_fit_height ]; then
                 window_y_new_pos=$(($6 + $top_margin))
@@ -299,6 +312,49 @@ function windowmove () {
 
  }
 
+# Function windowzoom provides a zoom function centered and proportional to the screen size
+# parameters: $1 <top margin>, $2 <side margin>, $3 <window header>, $4 <GTK header fix> ,  $5 <vertical step delta>, $6 <margin delta>, $7 <direction 1=increase>
+function windowexpand () {
+
+    window_fit_width=$(($display_width - $2 - $2))
+    window_y_new_pos=$(($window_y_pos - $5))
+    window_min_width=800
+    zoom_x_delta=$5
+    if [ $window_width -ge $window_fit_width ] && [ $7 -eq 0 ]; then
+        xdotool windowstate --remove MAXIMIZED_HORZ $active_window_id  # Fixes maxed window H
+    fi
+
+    if [ "$window_name" != "Desktop — Plasma" ]; then
+        if  [ $9 -eq 1 ]; then
+            if [ $window_width -lt  $(($window_fit_width - $(($window_x_pos * 2)))) ]; then
+                echo $window_width > ~/$active_window_id
+                window_new_width=$(($display_width - $(($window_x_pos * 2))))
+            else
+                saved_width=$(<$active_window_id)
+                if [ $saved_width -gt 0 ]; then
+                    window_new_width=$saved_width
+                else
+                    window_new_width=$window_min_width
+                fi
+            fi
+            window_x_new_pos=$(($window_x_new_pos + $side_offset))
+            xdotool windowmove --sync $active_window_id $window_x_pos $window_y_new_pos
+            xdotool windowsize --sync $active_window_id $window_new_width $window_height
+        fi
+#        if [ $pointer_x -ge $(($window_x_new_pos + $window_new_width - $(($zoom_x_delta / 4)))) ]; then
+#            pointer_x=$(($window_x_new_pos + $window_new_width - $(($zoom_x_delta / 4))))
+#        elif [ $pointer_x -le $(($window_x_new_pos + $(($zoom_x_delta / 4)))) ]; then
+#            pointer_x=$(($window_x_new_pos + $(($zoom_x_delta / 4))))
+#        elif [ $pointer_y -ge $(($window_y_new_pos + $window_new_height - $zoom_y_delta))  ]; then
+#            pointer_y=$(($window_y_new_pos + $window_new_height - $(($zoom_y_delta / 2))))
+#        elif [ $pointer_y -le $(($window_y_new_pos + $zoom_y_delta)) ]; then
+#            pointer_y=$(($window_y_new_pos + $(($zoom_y_delta / 2))))
+#        fi
+#        xdotool mousemove $pointer_x $pointer_y
+    fi
+
+ }
+
 # Function minimize minimizes all other windows other than the active window to clear screen clutter 
  function minimize () {
  
@@ -321,6 +377,9 @@ function windowmove () {
     moveR )
         windowmove $top_margin $side_margin $bottom_margin $header_height $gtk_fix $margin_delta $(($margin_delta * 2)) $(($margin_delta * 3)) 1 $side_offset
     ;;
+    expandP )
+        windowexpand $top_margin $side_margin $bottom_margin $header_height $gtk_fix $margin_delta $(($margin_delta * 2)) $(($margin_delta * 3)) 1 $side_offset
+    ;;
     moveC )
         windowmove $top_margin $side_margin $bottom_margin $footer_height $gtk_fix 0 0 0 2 $side_offset
     ;;
@@ -334,8 +393,8 @@ function windowmove () {
         windowwidth $side_margin $window_x_pos $window_y_pos $header_height $gtk_fix $width_steps $footer_height 0 $side_offset
     ;;  
     widthP )
-        windowwidth $side_margin $window_x_pos $window_y_pos  $header_height $gtk_fix $width_steps $footer_height 1 $side_offset
-    ;;  
+        windowwidth $side_margin $window_x_pos $window_y_pos $header_height $gtk_fix $width_steps $footer_height 1 $side_offset
+    ;;
     heightM )
         windowheight $top_margin $bottom_margin $height_steps $gtk_fix 1
     ;;  
