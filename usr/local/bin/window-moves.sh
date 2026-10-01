@@ -71,6 +71,14 @@ function move_pointer () {
     ydotool mousemove -x $1 -y $2
 }
 
+if [[ $pointer_x -lt $window_x_pos ]] || [[ $pointer_x -ge $(($window_x_pos + $window_width)) ]] || [[ $pointer_y -lt $window_y_pos ]] || [[ $pointer_y -ge $(($window_y_pos + $window_height)) ]] ; then
+    target_x=$(($window_x_pos + $window_width / 2))
+    target_y=$(($window_y_pos + $window_height / 2))
+    move_pointer $(($target_x - $pointer_x)) $(($target_y - $pointer_y))
+    pointer_x=$target_x
+    pointer_y=$target_y
+fi
+
 # Function windowheight provides window height adjustment from the bottom in steps by pixel amaount 
 # parameters: $1 <top margin>, $2 <side margin>, $3 <window header>,  $4 <GTK header fix>, $5 <step in pixels>, $6 <direction 1=increase>
 function windowheight () {
@@ -292,28 +300,29 @@ function windowmove () {
     window_y_new_pos=$(($window_y_pos - $5))
     window_fit_height=$(($display_height - $1 - $3))
     window_fit_width=$(($display_width - $2 - $2 + $5 + $5))
+    window_x_rel_pos=$(($window_x_pos - $side_offset))
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
         if [ $9 -eq 0 ]; then
-            if [[ $window_x_pos -eq $2 ]]; then
+            if [[ $window_x_rel_pos -eq $2 ]]; then
                 window_x_new_pos=$(($6 + $2))
-            elif [[ $window_x_pos -eq $(($6 + $2)) ]]; then
+            elif [[ $window_x_rel_pos -eq $(($6 + $2)) ]]; then
                 window_x_new_pos=$(($7 + $2))
-            elif [[ $window_x_pos -eq $(($7 + $2)) ]]; then
+            elif [[ $window_x_rel_pos -eq $(($7 + $2)) ]]; then
                 window_x_new_pos=$(($8 + $2))
-            elif [[ $window_x_pos -eq $(($8 + $2)) ]]; then
+            elif [[ $window_x_rel_pos -eq $(($8 + $2)) ]]; then
                 window_x_new_pos=$((($display_width - $window_width) / 2))
             else
                 window_x_new_pos=$2
-            fi 
+            fi
         elif [[ $9 -eq 1 ]]; then
-            if [[ $window_x_pos -eq $(($display_width - $window_width - $2)) ]]; then
+            if [[ $window_x_rel_pos -eq $(($display_width - $window_width - $2)) ]]; then
                 window_x_new_pos=$(($display_width - $window_width - $6 - $2))
-            elif [[ $window_x_pos -eq $(($display_width - $window_width - $6 - $2)) ]]; then
+            elif [[ $window_x_rel_pos -eq $(($display_width - $window_width - $6 - $2)) ]]; then
                 window_x_new_pos=$(($display_width - $window_width - $7 - $2))
-            elif [[ $window_x_pos -eq $(($display_width - $window_width - $7 - $2)) ]]; then
+            elif [[ $window_x_rel_pos -eq $(($display_width - $window_width - $7 - $2)) ]]; then
                 window_x_new_pos=$(($display_width - $window_width - $8 - $2))
-            elif [[ $window_x_pos -eq $(($display_width - $window_width - $8 - $2)) ]]; then
+            elif [[ $window_x_rel_pos -eq $(($display_width - $window_width - $8 - $2)) ]]; then
                 window_x_new_pos=$((($display_width - $window_width) / 2 ))
             else
                 window_x_new_pos=$(($display_width - $window_width - $2))
