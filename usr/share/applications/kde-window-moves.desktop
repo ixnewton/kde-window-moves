@@ -1,0 +1,61 @@
+[Desktop Entry]
+Type=Application
+Name=KDE Window Moves
+Comment=Window movement/resize/zoom/minimise shortcuts
+Exec=window-moves.sh moveC
+Icon=preferences-system-windows
+NoDisplay=true
+StartupNotify=false
+Actions=moveL;moveR;moveC;topM;topP;widthM;widthP;heightP;heightM;zoomP;zoomM;expandP;minimize;
+
+[Desktop Action moveL]
+Name=WindowMove L
+Exec=window-moves.sh moveL
+
+[Desktop Action moveR]
+Name=WindowMove R
+Exec=window-moves.sh moveR
+
+[Desktop Action moveC]
+Name=WindowMove C
+Exec=window-moves.sh moveC
+
+[Desktop Action topM]
+Name=WindowTop -
+Exec=window-moves.sh topM
+
+[Desktop Action topP]
+Name=WindowTop +
+Exec=window-moves.sh topP
+
+[Desktop Action widthM]
+Name=WindowWidth -
+Exec=window-moves.sh widthM
+
+[Desktop Action widthP]
+Name=WindowWidth +
+Exec=window-moves.sh widthP
+
+[Desktop Action heightP]
+Name=WindowHeight -
+Exec=window-moves.sh heightP
+
+[Desktop Action heightM]
+Name=WindowHeight +
+Exec=window-moves.sh heightM
+
+[Desktop Action zoomP]
+Name=WindowZoom +
+Exec=window-moves.sh zoomP
+
+[Desktop Action zoomM]
+Name=WindowZoom -
+Exec=window-moves.sh zoomM
+
+[Desktop Action expandP]
+Name=WindowExpand
+Exec=window-moves.sh expandP
+
+[Desktop Action minimize]
+Name=MinimizeAll
+Exec=window-moves.sh minimize
