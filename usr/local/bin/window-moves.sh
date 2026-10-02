@@ -214,61 +214,81 @@ function windowzoom() {
     window_min_width=800
     window_min_height=450
     zoom_y_delta=$5
-    if [[ $window_width -ge $window_fit_width ]] && [[ $7 -eq 0 ]]; then
-        kdotool windowstate --remove MAXIMIZED_VERT $active_window_id # Fixes maxed window V
-        kdotool windowstate --remove MAXIMIZED_HORZ $active_window_id # Fixes maxed window H
-        zoom_x_delta=$(($6 * 2))
-    else
-        zoom_x_delta=$(($(($window_width * $5)) / $window_height))
-    fi
+    zoom_x_delta=$(($(($window_width * $5)) / $window_height))
     top_margin=$(($1 + $3 - $4))
+    side_gap_limit=$(($display_width / $margin_delta))
+    top_gap_limit=$(($display_height / $top_delta))
 
     if [ "$window_name" != "Desktop — Plasma" ]; then
+        window_x_rel_pos=$(($window_x_pos - $side_offset))
         if [[ $7 -eq 1 ]]; then
-            if [[ $window_width -lt $(($window_fit_width - $zoom_x_delta)) ]]; then
+            if [[ $window_width -ge $window_fit_width ]] && [[ $window_height -ge $window_fit_height ]]; then
+                kdotool windowstate --add MAXIMIZED $active_window_id
+                window_x_new_pos=$side_offset
+                window_y_new_pos=0
+                window_new_width=$display_width
+                window_new_height=$display_height
+            else
                 window_new_width=$(($window_width + $zoom_x_delta))
-            else
-                window_new_width=$(($window_fit_width))
-            fi
-            if [[ $window_height -lt $(($window_fit_height - $zoom_y_delta)) ]]; then
                 window_new_height=$(($window_height + $zoom_y_delta))
-            else
-                window_new_height=$(($window_fit_height))
+                if [[ $window_new_width -gt $window_fit_width ]]; then
+                    window_new_width=$window_fit_width
+                fi
+                if [[ $window_new_height -gt $window_fit_height ]]; then
+                    window_new_height=$window_fit_height
+                fi
+                window_centred_pos=$((($display_width - $window_width) / 2))
+                window_right_gap=$(($display_width - $2 - $window_x_rel_pos - $window_width))
+                if [[ $window_x_rel_pos -eq $window_centred_pos ]] || [[ $window_right_gap -le 0 ]]; then
+                    window_x_new_pos=$((($display_width - $window_new_width) / 2))
+                else
+                    window_growth_limit=$(($display_width - $2 - $window_x_rel_pos))
+                    window_centred_width=$(($display_width - $window_x_rel_pos - $window_x_rel_pos))
+                    if [[ $window_centred_width -gt $window_width ]] && [[ $window_centred_width -lt $window_growth_limit ]]; then
+                        window_growth_limit=$window_centred_width
+                    fi
+                    if [[ $window_new_width -gt $window_growth_limit ]]; then
+                        window_new_width=$window_growth_limit
+                    fi
+                    window_x_new_pos=$window_x_rel_pos
+                fi
+                if [[ $(($window_new_height + $window_y_pos - $1)) -ge $window_fit_height ]]; then
+                    window_y_new_pos=$top_margin
+                else
+                    window_y_new_pos=$(($window_y_pos))
+                fi
+                window_x_new_pos=$(($window_x_new_pos + $side_offset))
+                kdotool windowmove $active_window_id $window_x_new_pos $window_y_new_pos
+                sleep $sync_delay
+                kdotool windowsize $active_window_id $window_new_width $window_new_height
             fi
-            if [[ $(($window_new_width + $window_x_pos - $2)) -lt $window_fit_width ]]; then
-                window_x_new_pos=$window_x_pos
-            else
-                window_x_new_pos=$(($window_fit_width - $window_new_width + $2))
-            fi
-            if [[ $(($window_new_height + $window_y_pos - $1)) -ge $window_fit_height ]]; then
+        else
+            if [[ $window_width -gt $window_fit_width ]] || [[ $window_height -gt $window_fit_height ]]; then
+                kdotool windowstate --remove FULLSCREEN $active_window_id
+                kdotool windowstate --remove MAXIMIZED_VERT $active_window_id # Fixes maxed window V
+                kdotool windowstate --remove MAXIMIZED_HORZ $active_window_id # Fixes maxed window H
+                window_new_width=$window_fit_width
+                window_new_height=$window_fit_height
+                window_x_new_pos=$((($display_width - $window_new_width) / 2))
                 window_y_new_pos=$top_margin
             else
-                window_y_new_pos=$(($window_y_pos))
-            fi
-            window_x_new_pos=$(($window_x_new_pos + $side_offset))
-            kdotool windowmove $active_window_id $window_x_new_pos $window_y_new_pos
-            sleep $sync_delay
-            kdotool windowsize $active_window_id $window_new_width $window_new_height
-        else
-            if [[ $window_width -ge $(($window_min_width + $zoom_x_delta)) ]]; then
                 window_new_width=$(($window_width - $zoom_x_delta))
-            else
-                window_new_width=$(($window_min_width))
-            fi
-            if [[ $window_height -ge $(($window_min_height + $zoom_y_delta)) ]]; then
                 window_new_height=$(($window_height - $zoom_y_delta))
-            else
-                window_new_height=$(($window_min_height))
-            fi
-            if [[ $window_width -ge $window_fit_width ]]; then
-                window_x_new_pos=$(($6 + $2))
-            else
-                window_x_new_pos=$(($window_x_pos))
-            fi
-            if [[ $(($window_height + $top_margin)) -ge $window_fit_height ]]; then
-                window_y_new_pos=$(($6 + $top_margin))
-            else
-                window_y_new_pos=$(($window_y_pos))
+                if [[ $window_new_width -lt $window_min_width ]]; then
+                    window_new_width=$window_min_width
+                fi
+                if [[ $window_new_height -lt $window_min_height ]]; then
+                    window_new_height=$window_min_height
+                fi
+                window_centred_pos=$((($display_width - $window_new_width) / 2))
+                window_centred_y=$((($window_fit_height - $window_new_height) / 2 + $top_margin))
+                if [[ $window_centred_pos -lt $side_gap_limit ]] && [[ $window_centred_y -lt $top_gap_limit ]]; then
+                    window_x_new_pos=$window_centred_pos
+                    window_y_new_pos=$window_centred_y
+                else
+                    window_x_new_pos=$window_x_rel_pos
+                    window_y_new_pos=$window_y_pos
+                fi
             fi
             window_x_new_pos=$(($window_x_new_pos + $side_offset))
             kdotool windowsize $active_window_id $window_new_width $window_new_height

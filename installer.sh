@@ -104,30 +104,50 @@ else
     # The action the application itself runs (Exec=window-moves.sh moveC) becomes the _launch shortcut
     launch_action=$(sed -n 's/^Exec=window-moves\.sh \([^ ;]\{1,\}\).*/\1/p' "$desktop_file" | head -n 1)
 
-    # Map the custom commands in the .kksrc (Exec=window-moves.sh <action>) to their keys
+    # Map the shortcuts in the .kksrc to action names. Two forms are recognised:
+    # custom commands ([Custom Commands][id] Exec=window-moves.sh <action>, keyed
+    # by _launch in [id][Global Shortcuts]) and a direct export of the
+    # application's shortcuts ([kde-window-moves.desktop][Global Shortcuts],
+    # keyed by action name)
     declare -A exec_for=() key_for=() shortcut_for=()
     section_id=""
+    in_shortcuts=""
     while IFS= read -r line; do
         line=${line%$'\r'}
         case $line in
             "[Custom Commands]["*"]")
                 section_id=${line#"[Custom Commands]["}
                 section_id=${section_id%"]"}
+                in_shortcuts=""
                 ;;
             "["*"][Global Shortcuts]")
                 section_id=${line%"][Global Shortcuts]"}
                 section_id=${section_id#"["}
+                in_shortcuts=1
+                ;;
+            "["*"]")
+                section_id=""
+                in_shortcuts=""
                 ;;
             Exec=*) [ -n "$section_id" ] && exec_for[$section_id]=${line#Exec=} ;;
-            _launch=*) [ -n "$section_id" ] && key_for[$section_id]=${line#_launch=} ;;
+            *=*) [ -n "$in_shortcuts" ] && key_for["$section_id:${line%%=*}"]=${line#*=} ;;
         esac
     done < "$kksrc"
-    for id in "${!key_for[@]}"; do
+    for entry in "${!key_for[@]}"; do
+        id=${entry%:*}
+        name=${entry#*:}
         exec_cmd=${exec_for[$id]:-}
-        [[ $exec_cmd == "window-moves.sh "* ]] || continue
-        action=${exec_cmd##* }
-        [ "$action" = "$launch_action" ] && action="_launch"
-        shortcut_for[$action]=${key_for[$id]}
+        if [[ $exec_cmd == "window-moves.sh "* ]]; then
+            [ "$name" = "_launch" ] || continue
+            action=${exec_cmd##* }
+            [ "$action" = "$launch_action" ] && action="_launch"
+        elif [[ $id == *"$desktop_id" ]]; then
+            [[ $name == _* && $name != _launch ]] && continue
+            action=$name
+        else
+            continue
+        fi
+        shortcut_for[$action]=${key_for[$entry]}
     done
 
     # Apply the shortcuts to the running session through the KGlobalAccel D-Bus

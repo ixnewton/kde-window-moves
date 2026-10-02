@@ -28,13 +28,13 @@ kdotool can read the cursor position but cannot set it, and KWin's scripting API
 
 ## Installation
 
-The script should be placed in /usr/local/bin and set executable 755. The repository layout mirrors this: usr/local/bin/window-moves.sh.
+Run `./installer.sh`. It checks for kdotool, ydotool and kscreen-doctor, installs window-moves.sh to /usr/local/bin (mode 755, mirroring the usr/local/bin layout), enables the ydotoold user service, applies the Flat acceleration profile to the ydotoold virtual device, and registers "KDE Window Moves" as an application in System Settings > Shortcuts with the key set from Hotkeys/WindowMovesKeys.kksrc (an export made in the Shortcuts settings page) applied to it.
 
-The shortcuts depend on khotkeys being installed so make sure it is there in your package manager. Using the KDE System Settings > Shortcuts > Custom Shortcuts dialogue import the WindowMoves.khotkeys file to create a keymapping group. Due to rework of how shortcuts are set for applications "Custom Shortcuts" has become effectively an additional application. To get everything working the new way it may be necessary reset to defaults the main shortcuts and reload custom shortcut groups/folders from saved .khotkeys files. Once backups of your custom shortcuts are saved delete "Custom Shortcuts" in the "System" part of Shortcuts then set all shortcuts to defaults. To restore custom shortcuts re-apply saved shortcut files including WindowMoves.khotkeys and all should be well. In my case this resolved non functional Ctrl+Z, Ctrl+X, Ctrl+Y shortcuts in key editors like Kate.
+The shortcuts can be adjusted in System Settings > Shortcuts > KDE Window Moves. Re-running installer.sh re-applies the exported set; to share a changed set, export it again from the Shortcuts settings page.
 
 ## The mapping scheme
 
-All actions: `<Ctrl> + <Shift> + ...` except width which uses `<Ctrl> + {` and `<Ctrl> + }`. The navigation keys `<Left> <Right> <Up> <Down> c (center)` are reasonably intuitive to learn. Window zoom is implemented in sequential steps as `<Ctrl> + <Shift> + w ` (increase) and `<Ctrl> + <Shift> + q ` (decrease), height as `<Ctrl> + <Shift> + e ` (decrease) and `<Ctrl> + <Shift> + r ` (increase), width expand as `<Ctrl> + <Shift> + Return` and minimise all as `<Ctrl> + <Shift> + m `.
+All actions: `<Ctrl> + <Shift> + ...` except width which uses `<Ctrl> + {` and `<Ctrl> + }` and minimise all which uses `<Ctrl> + <Alt> + m`. The navigation keys `<Left> <Right> <Up> <Down> c (center)` are reasonably intuitive to learn. Window zoom (zoomP/zoomM) is unassigned in the exported set, height is `<Ctrl> + <Shift> + r ` (decrease) and `<Ctrl> + <Shift> + e ` (increase), width expand as `<Ctrl> + <Shift> + l `.
 
 | Keys | Command | Action |
 | --- | --- | --- |
@@ -45,12 +45,12 @@ All actions: `<Ctrl> + <Shift> + ...` except width which uses `<Ctrl> + {` and `
 | Ctrl+Shift+Down | topP | Top margin plus |
 | Ctrl+{ | widthM | Width minus |
 | Ctrl+} | widthP | Width plus |
-| Ctrl+Shift+E | heightP | Height minus (bottom edge up) |
-| Ctrl+Shift+R | heightM | Height plus (bottom edge down) |
-| Ctrl+Shift+W | zoomP | Zoom plus |
-| Ctrl+Shift+Q | zoomM | Zoom minus |
-| Ctrl+Shift+Return | expandP | Expand width about the window position |
-| Ctrl+Shift+M | minimize | Minimise all but the focussed window |
+| Ctrl+Shift+R | heightP | Height minus (bottom edge up) |
+| Ctrl+Shift+E | heightM | Height plus (bottom edge down) |
+| (unassigned) | zoomP | Zoom plus |
+| (unassigned) | zoomM | Zoom minus |
+| Ctrl+Shift+L | expandP | Expand width about the window position |
+| Ctrl+Alt+M | minimize | Minimise all but the focussed window |
 
 Standard KDE global shortcuts group "kwin" can be given alternative key mappings for instance minimize window `<Ctrl> + <Shift> + n ` and close window `<Ctrl> + <Shift> + b ` to be in line with this scheme.
 
