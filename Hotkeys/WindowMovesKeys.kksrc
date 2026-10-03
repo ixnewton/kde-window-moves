@@ -1,8 +1,8 @@
 [kde-window-moves.desktop][Global Shortcuts]
 _launch=
 expandP=Ctrl+Shift+L
-heightM=Ctrl+Shift+E
-heightP=Ctrl+Shift+R
+heightM=Ctrl+Shift+R
+heightP=Ctrl+Shift+E
 minimize=Ctrl+Alt+M
 moveC=Ctrl+Shift+C
 moveL=Ctrl+Shift+Left
