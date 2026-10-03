@@ -4,12 +4,11 @@
 # "KDE Window Moves" global shortcut set with KGlobalAccel.
 # Run once per user from a KDE session; safe to re-run.
 #
-# Usage: kde-window-moves-setup.sh [kksrc_file] [desktop_file]
+# Usage: kde-window-moves-setup.sh [kksrc_file]
 
 set -e
 
 kksrc="${1:-/usr/share/kde-window-moves/WindowMovesKeys.kksrc}"
-desktop_file="${2:-/usr/share/applications/kde-window-moves.desktop}"
 desktop_id="kde-window-moves.desktop"
 
 # 1. Start/enable the ydotoold daemon for the logged-in user
@@ -87,54 +86,20 @@ declare -A shortcut_for=()
 if [ ! -r "$kksrc" ]; then
     echo "WARNING: $kksrc not found - assign the shortcuts manually via System Settings > Shortcuts."
 else
-    # The action the application itself runs (Exec=window-moves.sh moveC) becomes the _launch shortcut
-    launch_action=$(sed -n 's/^Exec=window-moves\.sh \([^ ;]\{1,\}\).*/\1/p' "$desktop_file" | head -n 1)
-
-    # Map the shortcuts in the .kksrc to action names. Two forms are recognised:
-    # custom commands ([Custom Commands][id] Exec=window-moves.sh <action>, keyed
-    # by _launch in [id][Global Shortcuts]) and a direct export of the
-    # application's shortcuts ([kde-window-moves.desktop][Global Shortcuts],
-    # keyed by action name)
-    declare -A exec_for=() key_for=()
-    section_id=""
+    # The .kksrc is a direct export of the application's shortcuts:
+    # the [kde-window-moves.desktop][Global Shortcuts] section maps action
+    # labels (moveL, zoomP, ...) to QKeySequence strings. Empty keys
+    # (unassigned actions) are skipped.
     in_shortcuts=""
     while IFS= read -r line; do
         line=${line%$'\r'}
         case $line in
-            "[Custom Commands]["*"]")
-                section_id=${line#"[Custom Commands]["}
-                section_id=${section_id%"]"}
-                in_shortcuts=""
-                ;;
-            "["*"][Global Shortcuts]")
-                section_id=${line%"][Global Shortcuts]"}
-                section_id=${section_id#"["}
-                in_shortcuts=1
-                ;;
-            "["*"]")
-                section_id=""
-                in_shortcuts=""
-                ;;
-            Exec=*) [ -n "$section_id" ] && exec_for[$section_id]=${line#Exec=} ;;
-            *=*) [ -n "$in_shortcuts" ] && key_for["$section_id:${line%%=*}"]=${line#*=} ;;
+            "[$desktop_id][Global Shortcuts]") in_shortcuts=1 ;;
+            "["*"]") in_shortcuts="" ;;
+            *=*) [ -n "$in_shortcuts" ] && [ -n "${line#*=}" ] && \
+                 shortcut_for[${line%%=*}]=${line#*=} ;;
         esac
     done < "$kksrc"
-    for entry in "${!key_for[@]}"; do
-        id=${entry%:*}
-        name=${entry#*:}
-        exec_cmd=${exec_for[$id]:-}
-        if [[ $exec_cmd == "window-moves.sh "* ]]; then
-            [ "$name" = "_launch" ] || continue
-            action=${exec_cmd##* }
-            [ "$action" = "$launch_action" ] && action="_launch"
-        elif [[ $id == *"$desktop_id" ]]; then
-            [[ $name == _* && $name != _launch ]] && continue
-            action=$name
-        else
-            continue
-        fi
-        shortcut_for[$action]=${key_for[$entry]}
-    done
 
     # Apply the shortcuts to the running session through the KGlobalAccel D-Bus
     # API (the same path System Settings uses); the daemon persists them itself

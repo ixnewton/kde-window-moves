@@ -27,8 +27,6 @@ cp "$repo/usr/share/applications/kde-window-moves.desktop" ~/.local/share/applic
 kbuildsycoca6 2>/dev/null
 
 # 3. Per-user session setup: ydotoold, pointer profile and shortcut registration
-"$repo/usr/local/bin/kde-window-moves-setup.sh" \
-    "$repo/Hotkeys/WindowMovesKeys.kksrc" \
-    "$repo/usr/share/applications/kde-window-moves.desktop"
+"$repo/usr/local/bin/kde-window-moves-setup.sh" "$repo/Hotkeys/WindowMovesKeys.kksrc"
 
 echo "Installed /usr/local/bin/window-moves.sh and configured ydotool."

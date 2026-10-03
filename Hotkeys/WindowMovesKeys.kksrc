@@ -1,76 +1,15 @@
-[Custom Commands][net.local.window-moves.sh-2.desktop]
-Exec=window-moves.sh moveR
-Name=window-moves.sh moveR
-
-[Custom Commands][net.local.window-moves.sh-3.desktop]
-Exec=window-moves.sh heightP
-Name=window-moves.sh heightP
-
-[Custom Commands][net.local.window-moves.sh-4.desktop]
-Exec=window-moves.sh widthP
-Name=window-moves.sh widthP
-
-[Custom Commands][net.local.window-moves.sh-5.desktop]
-Exec=window-moves.sh widthM
-Name=window-moves.sh widthM
-
-[Custom Commands][net.local.window-moves.sh-6.desktop]
-Exec=window-moves.sh heightM
-Name=window-moves.sh heightM
-
-[Custom Commands][net.local.window-moves.sh-9.desktop]
-Exec=window-moves.sh minimize
-Name=window-moves.sh minimize
-
-[Custom Commands][net.local.window-moves.sh.desktop]
-Exec=window-moves.sh topM
-Name=window-moves.sh topM
-
-[Custom Commands][window-moves.sh-16.desktop]
-Exec=window-moves.sh moveL
-Name=window-moves.sh moveL
-
-[Custom Commands][window-moves.sh-17.desktop]
-Exec=window-moves.sh expandP
-Name=window-moves.sh expandP
-
-[Custom Commands][window-moves.sh-18.desktop]
-Exec=window-moves.sh moveC
-Name=window-moves.sh moveC
-
-[Custom Commands][window-moves.sh-22.desktop]
-Exec=window-moves.sh topP
-Name=window-moves.sh topP
-
-[net.local.window-moves.sh-2.desktop][Global Shortcuts]
-_launch=Ctrl+Shift+Right
-
-[net.local.window-moves.sh-3.desktop][Global Shortcuts]
-_launch=Ctrl+Shift+R
-
-[net.local.window-moves.sh-4.desktop][Global Shortcuts]
-_launch=Ctrl+}
-
-[net.local.window-moves.sh-5.desktop][Global Shortcuts]
-_launch=Ctrl+{
-
-[net.local.window-moves.sh-6.desktop][Global Shortcuts]
-_launch=Ctrl+Shift+E
-
-[net.local.window-moves.sh-9.desktop][Global Shortcuts]
-_launch=Ctrl+Alt+M
-
-[net.local.window-moves.sh.desktop][Global Shortcuts]
-_launch=Ctrl+Shift+Up
-
-[window-moves.sh-16.desktop][Global Shortcuts]
-_launch=Ctrl+Shift+Left
-
-[window-moves.sh-17.desktop][Global Shortcuts]
-_launch=Ctrl+Shift+L
-
-[window-moves.sh-18.desktop][Global Shortcuts]
-_launch=Ctrl+Shift+C
-
-[window-moves.sh-22.desktop][Global Shortcuts]
-_launch=Ctrl+Shift+Down
+[kde-window-moves.desktop][Global Shortcuts]
+_launch=
+expandP=Ctrl+Shift+L
+heightM=Ctrl+Shift+E
+heightP=Ctrl+Shift+R
+minimize=Ctrl+Alt+M
+moveC=Ctrl+Shift+C
+moveL=Ctrl+Shift+Left
+moveR=Ctrl+Shift+Right
+topM=Ctrl+Shift+Up
+topP=Ctrl+Shift+Down
+widthM=Ctrl+{
+widthP=Ctrl+}
+zoomM=Ctrl+Shift+Q
+zoomP=Ctrl+Shift+W
