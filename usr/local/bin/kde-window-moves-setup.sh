@@ -101,6 +101,63 @@ else
         esac
     done < "$kksrc"
 
+    # Unbind any other component that already owns one of the requested key
+    # sequences (KDE defaults or stale custom shortcuts), so the new bindings
+    # are not shadowed. Conflicts are marked "none" in kglobalshortcutsrc and
+    # cleared in the running daemon. kglobalshortcutsrc stores each action as
+    # "default,active,Friendly Name" (multi-key sequences tab separated).
+    if [ ${#shortcut_for[@]} -gt 0 ] && [ -r "${XDG_CONFIG_HOME:-$HOME/.config}/kglobalshortcutsrc" ]; then
+        declare -A wanted=()
+        for action in "${!shortcut_for[@]}"; do
+            k=${shortcut_for[$action]//, /$'\t'}
+            IFS=$'\t' read -ra ks <<< "$k"
+            for k1 in "${ks[@]}"; do wanted[$k1]=1; done
+        done
+        comp_group=""
+        while IFS= read -r line; do
+            line=${line%$'\r'}
+            case $line in
+                "["*"]") comp_group=${line#"["}; comp_group=${comp_group%"]"} ;;
+                *=*)
+                    if [ "$comp_group" = "services][$desktop_id" ]; then
+                        continue
+                    fi
+                    name=${line%%=*}
+                    IFS=',' read -ra fields <<< "${line#*=}"
+                    active=${fields[1]:-${fields[0]}}
+                    conflict=""
+                    if [ -n "$active" ] && [ "$active" != "none" ]; then
+                        IFS=$'\t' read -ra slots <<< "$active"
+                        for slot in "${slots[@]}"; do
+                            if [[ -n ${wanted[$slot]:-} ]]; then conflict=$slot; break; fi
+                        done
+                    fi
+                    if [ -n "$conflict" ]; then
+                        if [[ $comp_group == "services]["* ]]; then
+                            comp_unique=${comp_group#"services]["}
+                        else
+                            comp_unique=$comp_group
+                        fi
+                        kw_args=()
+                        while IFS= read -r g; do
+                            [ -n "$g" ] && kw_args+=(--group "$g")
+                        done <<< "${comp_group//']['/$'\n'}"
+                        kwriteconfig6 --file kglobalshortcutsrc "${kw_args[@]}" \
+                            --key "$name" none
+                        if command -v gdbus >/dev/null 2>&1; then
+                            gdbus call --session --dest org.kde.kglobalaccel \
+                                --object-path /kglobalaccel \
+                                --method org.kde.KGlobalAccel.setForeignShortcut \
+                                "['$comp_unique','$name','','']" "@ai []" >/dev/null 2>&1 || \
+                                echo "NOTE: '$conflict' unbound in the config; re-login to release it from $comp_unique." >&2
+                        fi
+                        echo "Cleared conflicting shortcut '$conflict' from $comp_unique:$name."
+                    fi
+                    ;;
+            esac
+        done < "${XDG_CONFIG_HOME:-$HOME/.config}/kglobalshortcutsrc"
+    fi
+
     # Apply the shortcuts to the running session through the KGlobalAccel D-Bus
     # API (the same path System Settings uses); the daemon persists them itself
     if command -v gdbus >/dev/null 2>&1 && qdbus org.kde.kglobalaccel /kglobalaccel >/dev/null 2>&1; then
