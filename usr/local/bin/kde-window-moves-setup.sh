@@ -4,12 +4,53 @@
 # "KDE Window Moves" global shortcut set with KGlobalAccel.
 # Run once per user from a KDE session; safe to re-run.
 #
-# Usage: kde-window-moves-setup.sh [kksrc_file]
+# Usage: kde-window-moves-setup.sh [--remove] [kksrc_file]
 
 set -e
 
+remove_only=""
+if [ "${1:-}" = "--remove" ]; then
+    remove_only=1
+    shift
+fi
+
 kksrc="${1:-/usr/share/kde-window-moves/WindowMovesKeys.kksrc}"
 desktop_id="kde-window-moves.desktop"
+
+# --remove: unregister the shortcut component from the running session and
+# drop its persisted bindings, so an uninstall leaves nothing orphaned.
+if [ -n "$remove_only" ]; then
+    cfg="${XDG_CONFIG_HOME:-$HOME/.config}/kglobalshortcutsrc"
+    actions=()
+    in_ours=""
+    if [ -r "$cfg" ]; then
+        while IFS= read -r line; do
+            line=${line%$'\r'}
+            case $line in
+                "[services][$desktop_id]") in_ours=1 ;;
+                "["*"]") in_ours="" ;;
+                *=*) [ -n "$in_ours" ] && actions+=("${line%%=*}") ;;
+            esac
+        done < "$cfg"
+    fi
+    if command -v gdbus >/dev/null 2>&1 && qdbus org.kde.kglobalaccel /kglobalaccel >/dev/null 2>&1; then
+        for action in "${actions[@]}" "_launch"; do
+            gdbus call --session --dest org.kde.kglobalaccel --object-path /kglobalaccel \
+                --method org.kde.KGlobalAccel.unRegister \
+                "['$desktop_id','$action','','']" >/dev/null 2>&1 || true
+        done
+    else
+        echo "NOTE: kglobalaccel is not reachable - bindings are removed from the config; re-login clears the rest."
+    fi
+    if [ -r "$cfg" ] && command -v kwriteconfig6 >/dev/null 2>&1; then
+        for action in "${actions[@]}"; do
+            kwriteconfig6 --file kglobalshortcutsrc --group services --group "$desktop_id" \
+                --key "$action" --delete
+        done
+    fi
+    echo "Removed the 'KDE Window Moves' shortcuts (${#actions[@]} actions)."
+    exit 0
+fi
 
 # 1. Start/enable the ydotoold daemon for the logged-in user
 systemctl --user enable --now ydotool
